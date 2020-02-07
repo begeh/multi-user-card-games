@@ -1,9 +1,9 @@
 class Turn {
   constructor () {
-    dealer = 0,
-    p1 = 0,
-    p2 = 0,
-    forfiet = null
+    dealer: 0,
+    p1: 0,
+    p2: 0,
+    forfiet: null
   }
 }
 
