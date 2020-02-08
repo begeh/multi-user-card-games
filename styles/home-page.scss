@@ -1,6 +1,10 @@
 body {
+  nav {
+    width: 100vw;
+  }
   main {
-
+    display: flex;
+    flex-direction: row;
     section input{
       margin-bottom: 0.5em;
     }
@@ -16,10 +20,21 @@ body {
 
     //contains login section on homepage
     #login {
-      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-direction: column;
+      width: 40vw;
       max-height: 100%;
-      padding: 10rem 4rem 4rem 10rem;
+      padding: 7%;
+      padding-bottom: 50vh;
+      padding-top: 20vh;
       color: white;
+    }
+
+    #border {
+      padding-top: 50%;
+      border-style: inset;
     }
 
     //css for image of playing cards on first page
