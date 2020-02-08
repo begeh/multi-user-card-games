@@ -1,0 +1,35 @@
+body {
+  main {
+
+    section input{
+      margin-bottom: 0.5em;
+    }
+
+    //welcome message on homepage
+    #welcome_scr {
+      width: 50%;
+      max-height: 100%;
+      padding: 6rem 4rem 4rem 15rem;
+      text-align: center;
+      font-family: cursive;
+    }
+
+    //contains login section on homepage
+    #login {
+      width: 50%;
+      max-height: 100%;
+      padding: 10rem 4rem 4rem 10rem;
+      color: white;
+    }
+
+    //css for image of playing cards on first page
+    #playing_cards {
+      height: 20em;
+      width: 20em;
+    }
+
+    #register{
+      color: yellow;
+    }
+  }
+}
