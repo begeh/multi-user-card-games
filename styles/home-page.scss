@@ -1,0 +1,33 @@
+body {
+  margin: 2rem auto;
+  main {
+    display: grid;
+    height: 100%;
+    grid-template-columns: repeat(4, 25%);
+    grid-template-rows: repeat(5, 20%);
+
+    //welcome message on homepage
+    #welcome_scr {
+      padding-left: 2em;
+      grid-row-start: 2;
+      grid-column: span 2;
+      text-align: center;
+      font-style: Optima sans-serif;
+    }
+
+    //contains login section on homepage
+    #login {
+      color: white;
+      margin: 4em;
+      grid-column-start: 2;
+      grid-row-start: 2;
+      grid-column: span 2;
+    }
+
+    //css for image of playing cards on first page
+    #playing_cards {
+      height: 20em;
+      width: 20em;
+    }
+  }
+}
