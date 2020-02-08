@@ -1,10 +1,13 @@
 body {
-  margin: 2rem auto;
   main {
     display: grid;
     height: 100%;
     grid-template-columns: repeat(4, 25%);
     grid-template-rows: repeat(5, 20%);
+
+    section input{
+      margin-bottom: 0.5em;
+    }
 
     //welcome message on homepage
     #welcome_scr {
@@ -12,7 +15,7 @@ body {
       grid-row-start: 2;
       grid-column: span 2;
       text-align: center;
-      font-style: Optima sans-serif;
+      font-family: cursive;
     }
 
     //contains login section on homepage
@@ -28,6 +31,10 @@ body {
     #playing_cards {
       height: 20em;
       width: 20em;
+    }
+
+    #register{
+      color: yellow;
     }
   }
 }

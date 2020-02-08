@@ -4,6 +4,10 @@
 <head>
   <title>Home Page</title>
 
+  <!-- boostrap cdn added below-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
   <link rel="stylesheet" href="/styles/home-page.css" type="text/css" />
@@ -11,28 +15,47 @@
 
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
+
+  <!-- added in boostrap js below-->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
 </head>
 
 <body>
-
+  <div class="pos-f-t">
+    <div class="collapse" id="navbarToggleExternalContent">
+      <div class="bg-dark p-4">
+        <h5 class="text-white h4">Collapsed content</h5>
+        <span class="text-muted">Toggleable via the navbar brand.</span>
+      </div>
+    </div>
+    <nav class="navbar navbar-dark bg-dark">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent"
+        aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
   </div>
   <main>
-    <section id= "welcome_scr">
+    <section id="welcome_scr">
       <h1> WELCOME TO GAMEBOARD</h1>
       <h2> Time to Play</h2>
-      <img id = "playing_cards" src = "https://static.vecteezy.com/system/resources/previews/000/114/343/large_2x/free-vector-casino-royale-background.jpg"/>
+      <img id="playing_cards"
+        src="https://static.vecteezy.com/system/resources/previews/000/114/343/large_2x/free-vector-casino-royale-background.jpg" />
     </section>
-    <section id ="login">
-      <h2> Login/Sign-Up</h2>
+    <section id="login">
+      <h2> Login</h2>
       <form>
         <p>Username</p>
-        <input type= "text" />
+        <input size='40' type="text" />
         <p>Password</p>
-        <input type= "password" />
+        <input size='40' type="password" />
         <br>
-        <br>
-        <input type ="submit" class= "btn btn-primary" />
+        <input type="submit" class="btn btn-primary" value="Login" />
       </form>
+      <a href='#' id="register"> Not registered yet? Click here</a>
     </section>
   </main>
 </body>
