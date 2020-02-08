@@ -1,9 +1,5 @@
 body {
   main {
-    display: grid;
-    height: 100%;
-    grid-template-columns: repeat(4, 25%);
-    grid-template-rows: repeat(5, 20%);
 
     section input{
       margin-bottom: 0.5em;
@@ -11,20 +7,19 @@ body {
 
     //welcome message on homepage
     #welcome_scr {
-      padding-left: 2em;
-      grid-row-start: 2;
-      grid-column: span 2;
+      width: 50%;
+      max-height: 100%;
+      padding: 6rem 4rem 4rem 15rem;
       text-align: center;
       font-family: cursive;
     }
 
     //contains login section on homepage
     #login {
+      width: 50%;
+      max-height: 100%;
+      padding: 10rem 4rem 4rem 10rem;
       color: white;
-      margin: 4em;
-      grid-column-start: 2;
-      grid-row-start: 2;
-      grid-column: span 2;
     }
 
     //css for image of playing cards on first page
