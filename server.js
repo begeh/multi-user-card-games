@@ -54,6 +54,11 @@ app.get("/main/", (req, res) => {
   res.render("main");
 });
 
+//Redirects back to login page when searching'/login'
+app.get('/login', (req, res) => {
+  res.redirect('/');
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
