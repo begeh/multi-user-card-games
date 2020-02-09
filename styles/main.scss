@@ -1,12 +1,12 @@
 body #not_header{
   display: grid;
-  grid-template-columns: 48% 4% 48%;
-  justify-content: space-evenly;
-  align-content: space-between;
+  grid-template-columns: 30% 2% 69%;
+  // justify-content: space-around;
+  // align-content: space-around;
   padding-top: 16px;
   text-align: center;
 
-  #menu {
+  #leftSide {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -15,15 +15,46 @@ body #not_header{
     width: 45vw;
   }
 
-  #divider {
+  #middle {
     border-style: inset;
     background-color: black;
-    padding-top: unset;
-    margin: unset
+    // margin: inherit;
+    max-width: 2vw;
+    // padding: 16px;
+    padding-top: 10vh;
+    height: 100%;
+    padding-right: 16px;
   }
 
   .dropdown {
     padding: 50px;
     max-width: 10vw;
   }
+
+  #rightSide {
+    padding: 1em;
+    background-color: inherit;
+  }
+
+  // #rightSide img {
+  //   height: auto;
+  //   width: 400%;
+  // }
+
+  #rightSide #display {
+    background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    display: grid;
+    grid-template-rows: 40% 20% 40%;
+    grid-template-columns: 25% 50% 25%;
+    margin: inherit;
+    height: 80vh;
+    border-style: inset;
+    //background-color: snow;
+  }
+  #rightSide #display .gamespace {
+    border-style: outset;
+    border-color: darkslategrey;
+  }
+
 }
