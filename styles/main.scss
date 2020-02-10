@@ -62,7 +62,7 @@ body #not_header{
     display: unset;
     max-height: 100px;
     width: auto;
-    flex-wrap: inherit;
+
   }
 
   #rightSide #display #p2Hand img {
@@ -72,11 +72,22 @@ body #not_header{
     flex-wrap: inherit;
   }
 
+  #rightSide #display #middleHand {
+    display: flex;
+    flex-direction: column;
+    // max-height: 100px;
+    // width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+    padding: 16px;
+  }
+
   #rightSide #display #middleHand img {
-    display: unset;
+    //display: unset;
     max-height: 100px;
-    width: auto;
-    flex-wrap: inherit;
+    max-width: auto;
+
   }
 
 }
