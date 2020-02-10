@@ -58,11 +58,21 @@ body #not_header{
     border-color: darkslategrey;
   }
 
+  #rightSide #display #p1Hand {
+    display:grid;
+    grid-template-columns: repeat(7,13%);
+  }
+
   #rightSide #display #p1Hand img {
     display: unset;
     max-height: 100px;
     width: auto;
 
+  }
+
+  #rightSide #display #p2Hand {
+    display:grid;
+    grid-template-columns: repeat(7,13%);
   }
 
   #rightSide #display #p2Hand img {
@@ -97,5 +107,6 @@ body{
   #user-name{
     font-size: 16px;
     color: white;
+
   }
 }
