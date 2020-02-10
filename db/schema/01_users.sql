@@ -28,6 +28,10 @@ CREATE TABLE games_db(
   outcome INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- HOW THIS WORKS:
+-- first five values are recorded at beginning of turn using calculations from previous turn
+-- last 3 values are recorded at end of turn!
+
 CREATE TABLE turn_history (
   id SERIAL PRIMARY KEY NOT NULL,
   game_id INTEGER REFERENCES games_db(id) ON DELETE CASCADE,
