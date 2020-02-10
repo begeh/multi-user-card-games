@@ -1,0 +1,93 @@
+body #not_header{
+  display: grid;
+  grid-template-columns: 30% 10% 60%;
+  // justify-content: space-around;
+  // align-content: space-around;
+  padding-top: 16px;
+  text-align: center;
+
+  #leftSide {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-evenly;
+    margin: 5px;
+    width: auto;
+  }
+
+
+  #middle {
+    border-style: inset;
+    background-color: black;
+    // margin: inherit;
+    max-width: 2vw;
+    // padding: 16px;
+    padding-top: 10vh;
+    height: 100%;
+    // padding-right: 16px;
+  }
+
+  .dropdown {
+    padding: 5vh 0;
+    max-width: 60%;
+  }
+
+  #rightSide {
+    padding: 1em;
+    background-color: inherit;
+  }
+
+  // #rightSide img {
+  //   height: auto;
+  //   width: 400%;
+  // }
+
+  #rightSide #display {
+    background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
+    /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+    display: grid;
+    grid-template-rows: 40% 20% 40%;
+    grid-template-columns: 25% 50% 25%;
+    margin: inherit;
+    height: 80vh;
+    border-style: inset;
+    //background-color: snow;
+  }
+  #rightSide #display .gamespace {
+    border-style: outset;
+    border-color: darkslategrey;
+  }
+
+  #rightSide #display #p1Hand img {
+    display: unset;
+    max-height: 100px;
+    width: auto;
+
+  }
+
+  #rightSide #display #p2Hand img {
+    display: unset;
+    max-height: 100px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
+  #rightSide #display #middleHand {
+    display: flex;
+    flex-direction: column;
+    // max-height: 100px;
+    // width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+    padding: 16px;
+  }
+
+  #rightSide #display #middleHand img {
+    //display: unset;
+    max-height: 100px;
+    max-width: auto;
+
+  }
+
+}

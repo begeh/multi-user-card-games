@@ -62,6 +62,7 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+//This is included for testing purposes only, will be changed to ustilize routing
 app.get("/main/", (req, res) => {
   res.render("main");
 });
