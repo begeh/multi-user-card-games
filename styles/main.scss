@@ -26,6 +26,20 @@ body #not_header {
     max-width: 60%;
   }
 
+  //css forfeit button container
+  #middleLeft{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  //css for ready button container
+  #middleRight{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   #rightSide {
     padding: 1em;
     background-color: inherit;
