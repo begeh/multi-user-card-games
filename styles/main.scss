@@ -57,4 +57,25 @@ body #not_header{
     border-color: darkslategrey;
   }
 
+  #rightSide #display #p1Hand img {
+    display: unset;
+    max-height: 100px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
+  #rightSide #display #p2Hand img {
+    display: unset;
+    max-height: 100px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
+  #rightSide #display #middleHand img {
+    display: unset;
+    max-height: 100px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
 }
