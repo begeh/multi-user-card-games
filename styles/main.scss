@@ -1,6 +1,6 @@
 body #not_header{
   display: grid;
-  grid-template-columns: 30% 2% 69%;
+  grid-template-columns: 30% 10% 60%;
   // justify-content: space-around;
   // align-content: space-around;
   padding-top: 16px;
@@ -12,8 +12,9 @@ body #not_header{
     align-items: stretch;
     justify-content: space-evenly;
     margin: 5px;
-    width: 45vw;
+    width: auto;
   }
+
 
   #middle {
     border-style: inset;
@@ -23,12 +24,12 @@ body #not_header{
     // padding: 16px;
     padding-top: 10vh;
     height: 100%;
-    padding-right: 16px;
+    // padding-right: 16px;
   }
 
   .dropdown {
-    padding: 50px;
-    max-width: 10vw;
+    padding: 5vh 0;
+    max-width: 60%;
   }
 
   #rightSide {
