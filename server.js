@@ -67,12 +67,14 @@ app.get("/main/", (req, res) => {
 });
 
 //Redirects back to login page when searching'/login'
-app.post('/login', (req, res) => {
+app.post('/main', (req, res) => {
   db.query(`SELECT * FROM users WHERE username = $1;`, [req.body.username])
     .then(result => {
       if (req.body.password === result.rows[0].password) {
+        const templateVars = {};
+        templateVars.username = req.body.username;
         req.session.user_id = req.params.id;
-        res.redirect('/main');
+        res.render('main', templateVars);
       } else {
         res.send("Wrong Password");
       }
