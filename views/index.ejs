@@ -50,11 +50,11 @@
     </section>
     <section class= "col-xs" id="login">
       <h2> Login</h2>
-      <form>
+      <form action="/login" method="GET">
         <p>Username</p>
-        <input size='40' type="text" />
+        <input class="form-control" size='40' name='username' type="text" />
         <p>Password</p>
-        <input size='40' type="password" />
+        <input size='40' class='form-control' name= 'password' type="password" />
         <br>
         <input type="submit" class="btn btn-primary" value="Login" />
       </form>
