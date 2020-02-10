@@ -26,7 +26,7 @@
 > To see my own improvement, and inspire *friendly* competition
 
 ## REQUIREMENT 6: GAME HISTORIES
-> As a gmae player
+> As a game player
 > i want to be able to see a history of my games and others
 > to learn more about how the game is played
 
