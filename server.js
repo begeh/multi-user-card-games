@@ -2,20 +2,26 @@
 require('dotenv').config();
 
 // Web server config
-const PORT       = process.env.PORT || 8080;
-const ENV        = process.env.ENV || "development";
-const express    = require("express");
+const PORT = process.env.PORT || 8080;
+const ENV = process.env.ENV || "development";
+const express = require("express");
 const bodyParser = require("body-parser");
-const sass       = require("node-sass-middleware");
-const app        = express();
-const morgan     = require('morgan');
+const sass = require("node-sass-middleware");
+const app = express();
+const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 
 // PG database client/connection setup
 const { Pool } = require('pg');
 const dbParams = require('./lib/db.js');
 const db = new Pool(dbParams);
-db.connect();
+db.connect(function (err) {
+  if (!err) {
+    console.log("Database is connected ... nn");
+  } else {
+    console.log("Error connecting database ... nn");
+  }
+});
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -61,9 +67,17 @@ app.get("/main/", (req, res) => {
 });
 
 //Redirects back to login page when searching'/login'
-app.get('/login', (req, res) => {
-  req.session.user_id = req.params.id;
-  res.redirect('/main');
+app.post('/login', (req, res) => {
+  db.query(`SELECT * FROM users WHERE username = $1;`, [req.body.username])
+    .then(result => {
+      if (req.body.password === result.rows[0].password) {
+        req.session.user_id = req.params.id;
+        res.redirect('/main');
+      } else {
+        res.send("Wrong Password");
+      }
+    })
+    .catch(() => res.send("User not in database"));
 });
 
 app.listen(PORT, () => {

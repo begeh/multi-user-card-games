@@ -50,7 +50,7 @@
     </section>
     <section class= "col-xs" id="login">
       <h2> Login</h2>
-      <form action="/login" method="GET">
+      <form id= "login-form" action="/login" method="POST">
         <p>Username</p>
         <input class="form-control" size='40' name='username' type="text" />
         <p>Password</p>
@@ -59,6 +59,7 @@
         <input type="submit" class="btn btn-primary" value="Login" />
       </form>
       <a href='#' id="register"> Not registered yet? Click here</a>
+      <p id="error"></p>
     </section>
   </main>
 </body>
