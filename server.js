@@ -47,11 +47,13 @@ app.use(express.static("public"));
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
+const mainRoutes = require("./routes/main")
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
+app.use("/main", mainRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 
@@ -60,27 +62,6 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
   res.render("index");
-});
-
-//This is included for testing purposes only, will be changed to ustilize routing
-app.get("/main/", (req, res) => {
-  res.render("main");
-});
-
-//Redirects back to login page when searching'/login'
-app.post('/main', (req, res) => {
-  db.query(`SELECT * FROM users WHERE username = $1;`, [req.body.username])
-    .then(result => {
-      if (req.body.password === result.rows[0].password) {
-        const templateVars = {};
-        templateVars.username = req.body.username;
-        req.session.user_id = req.params.id;
-        res.render('main', templateVars);
-      } else {
-        res.send("Wrong Password");
-      }
-    })
-    .catch(() => res.send("User not in database"));
 });
 
 app.listen(PORT, () => {
