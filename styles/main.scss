@@ -1,8 +1,6 @@
-body #not_header{
+body #not_header {
   display: grid;
   grid-template-columns: 30% 10% 60%;
-  // justify-content: space-around;
-  // align-content: space-around;
   padding-top: 16px;
   text-align: center;
 
@@ -15,16 +13,12 @@ body #not_header{
     width: auto;
   }
 
-
   #middle {
     border-style: inset;
     background-color: black;
-    // margin: inherit;
     max-width: 2vw;
-    // padding: 16px;
     padding-top: 10vh;
     height: 100%;
-    // padding-right: 16px;
   }
 
   .dropdown {
@@ -37,10 +31,49 @@ body #not_header{
     background-color: inherit;
   }
 
-  // #rightSide img {
-  //   height: auto;
-  //   width: 400%;
-  // }
+  //css for 'P1 Played Cards' section of main page
+  #p1Right{
+    display: grid;
+    grid-template-columns: repeat(7, 10%);
+  }
+
+  //css for images in 'P1 Played Cards' section of main page
+  #p1Right img{
+    display: unset;
+    max-height: 90px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
+  //css for 'P2 Played Cards' section of main page
+  #p2Right{
+    display: grid;
+    grid-template-columns: repeat(7, 10%);
+  }
+
+  //css for images in 'P2 Played Cards' section of main page
+  #p2Right img{
+    display: unset;
+    max-height: 90px;
+    width: auto;
+    flex-wrap: inherit;
+  }
+
+  #p1Left .points{
+    color: yellow;
+    font-size: 30px;
+    height: 100%;
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+  }
+
+  #p2Left .points{
+    color: yellow;
+    font-size: 30px;
+    height: 100%;
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+  }
 
   #rightSide #display {
     background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
@@ -51,28 +84,27 @@ body #not_header{
     margin: inherit;
     height: 80vh;
     border-style: inset;
-    //background-color: snow;
   }
+
   #rightSide #display .gamespace {
     border-style: outset;
     border-color: darkslategrey;
   }
 
   #rightSide #display #p1Hand {
-    display:grid;
-    grid-template-columns: repeat(7,13%);
+    display: grid;
+    grid-template-columns: repeat(7, 13%);
   }
 
   #rightSide #display #p1Hand img {
     display: unset;
     max-height: 100px;
     width: auto;
-
   }
 
   #rightSide #display #p2Hand {
-    display:grid;
-    grid-template-columns: repeat(7,13%);
+    display: grid;
+    grid-template-columns: repeat(7, 13%);
   }
 
   #rightSide #display #p2Hand img {
@@ -85,8 +117,6 @@ body #not_header{
   #rightSide #display #middleHand {
     display: flex;
     flex-direction: column;
-    // max-height: 100px;
-    // width: auto;
     flex-wrap: wrap;
     justify-content: center;
     align-content: space-around;
@@ -94,17 +124,14 @@ body #not_header{
   }
 
   #rightSide #display #middleHand img {
-    //display: unset;
     max-height: 100px;
     max-width: auto;
-
   }
-
 }
 
-body{
+body {
   //css for username of logged in user in nav bar
-  #user-name{
+  #user-name {
     font-size: 16px;
     color: white;
     margin-bottom: 0;
