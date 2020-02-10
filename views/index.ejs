@@ -45,17 +45,21 @@
       <img id="playing_cards"
         src="https://static.vecteezy.com/system/resources/previews/000/114/343/large_2x/free-vector-casino-royale-background.jpg" />
     </section>
+    <section id="border">
+
+    </section>
     <section class= "col-xs" id="login">
       <h2> Login</h2>
-      <form>
+      <form id= "login-form" action="/main" method="POST">
         <p>Username</p>
-        <input size='40' type="text" />
+        <input class="form-control" size='40' name='username' type="text" />
         <p>Password</p>
-        <input size='40' type="password" />
+        <input size='40' class='form-control' name= 'password' type="password" />
         <br>
         <input type="submit" class="btn btn-primary" value="Login" />
       </form>
       <a href='#' id="register"> Not registered yet? Click here</a>
+      <p id="error"></p>
     </section>
   </main>
 </body>
