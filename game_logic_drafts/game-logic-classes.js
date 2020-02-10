@@ -1,3 +1,6 @@
+
+
+
 class Actor {
 
   constructor() {
@@ -20,9 +23,9 @@ class Player extends Actor {
     this.hand.forEach((element, index) => {
       if (card === element) {
         console.log(`FOUND MATCH at hand[${index}]`);
-        this.hand.splice(index, 1);
-        console.log(`${this.user}'s hand: ${this.hand}`);
-        console.log(`${element}, ${typeof element}`)
+        // this.hand.splice(index, 1);
+        // console.log(`${this.user}'s hand: ${this.hand}`);
+        // console.log(`${element}, ${typeof element}`)
         result = element;
         return;
       }
@@ -44,11 +47,10 @@ class Dealer extends Actor {
       const cardToDeal = Math.round(Math.random() * (this.hand.length - 1));
       console.log(`cardToDeal: index[${cardToDeal}]`)
       const cardVal = this.hand[cardToDeal];
-      this.hand.splice(cardToDeal, 1);
-      console.log(this.hand);
+      // this.hand.splice(cardToDeal, 1);
       return cardVal;
     } else {
-      return false;
+      return ;
     }
   }
 }
