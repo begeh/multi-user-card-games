@@ -61,7 +61,6 @@ body #not_header{
   #rightSide #display #p1Hand {
     display:grid;
     grid-template-columns: repeat(7,13%);
-    grid-template-rows: repeats(7, 14.3%);
   }
 
   #rightSide #display #p1Hand img {
@@ -74,7 +73,6 @@ body #not_header{
   #rightSide #display #p2Hand {
     display:grid;
     grid-template-columns: repeat(7,13%);
-    grid-template-rows: repeats(7, 14.3%);
   }
 
   #rightSide #display #p2Hand img {
