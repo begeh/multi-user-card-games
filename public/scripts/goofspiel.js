@@ -1,7 +1,6 @@
-
-
-// const playerSocket = io.connect()
-// console.log("Loaded goofspiel.js")
-// console.log(playerSocket.id)
-
-
+// $(function () {
+//   $("#goof").on('click', () => {
+//     const socket = io("/goofSpace");
+//     socket.emit('test', socket)
+//   });
+// })

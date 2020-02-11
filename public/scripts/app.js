@@ -11,7 +11,11 @@ $(function () {
 
   $("#goof").on('click', () => {
     socket.emit('goof-join')
-    console.log("goofLoad")
+    console.log("Attemping goofSpace join")
   });
+
+  socket.on('You', function(data) {
+    console.log(data)
+  })
 
 })

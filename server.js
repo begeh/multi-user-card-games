@@ -71,6 +71,9 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
+//Namespace stuff
+const goofSpace = io.of('/goofSpace')
+
 
 //Socket.io stuff goes here
 io.on('connection', function (socket) {
@@ -82,20 +85,19 @@ io.on('connection', function (socket) {
   })
 
   socket.on('ready', function (data) {
-    console.log(data + ' sent from client');
     socket.broadcast.emit('ready', data);
+    console.log(data + ' sent from client');
 
   });
 
-  socket.on('click', function (data) {
-    console.log("Hello");
-  });
-
-  //Room stuff
-  socket.on('goof-join', function () {
-    socket.join('goof-room')
-    console.log(socket.id, " joined goof-room")
+  socket.on('goof-join', function() {
+    socket.join('goofRoom')
+    console.log(socket.id, " joined goofRoom")
+    io.sockets.in('goofRoom').emit("You", {You: "should only see this if you're in the room"})
+    // console.log(socket)
   })
+
 });
+
 
 
