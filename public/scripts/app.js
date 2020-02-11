@@ -12,21 +12,34 @@ $(function () {
     socket.emit('ready', name)
   });
 
-  socket.on('ready', function(data){
+  socket.on('ready', function (data) {
     console.log(data + " printed at each socket")
   })
 
-  $(".inplay").click((element)=>{
-    element.preventDefault();
-    $("#middleHand #yourplay").replaceWith($(event.target));
-    $(event.target).attr('class', 'beenplayed');
-    $("#middleHand").append('<div id="yourplay"><div>');
-    // $("#p2Right").append($(event.target));
- });
+  //when player clicks on a card, it is moved to the middle of game board for play
+  $(".inplay").click((event) => {
+    event.preventDefault();
+    if ($("#yourplay").html() == "") {
+      $("#middleHand #yourplay").replaceWith($(event.target).parent());
+      ($(event.target).parent()).addClass('beenplayed');
+    }
+    else {
+      $("#p2Hand").append($(".beenplayed"));
+      $('.beenplayed').removeClass('beenplayed');
+      $("#middleHand").append($(event.target).parent());
+      $(event.target).parent().addClass('beenplayed');
+    }
+  });
 
-$("#ready").click((element) =>{
-  $("#p2Right").append($(".beenplayed"));
-});
+  //when ready button is clicked, players inplay hand goes to played cards sections
+  $("#ready").click((element) => {
+    element.preventDefault();
+    if ($("#yourplay").html() != "") {
+      $("#p2Right").append($(".beenplayed"));
+      $('.beenplayed').removeClass('beenplayed');
+      $("#middleHand").append('<div id="yourplay">');
+    }
+  });
 
 })
 
