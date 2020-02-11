@@ -2,20 +2,29 @@
 require('dotenv').config();
 
 // Web server config
-const PORT       = process.env.PORT || 8080;
-const ENV        = process.env.ENV || "development";
-const express    = require("express");
+const PORT = process.env.PORT || 8080;
+const ENV = process.env.ENV || "development";
+const express = require("express");
 const bodyParser = require("body-parser");
-const sass       = require("node-sass-middleware");
-const app        = express();
-const morgan     = require('morgan');
+const sass = require("node-sass-middleware");
+const app = express();
+const morgan = require('morgan');
 const cookieSession = require('cookie-session');
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 // PG database client/connection setup
 const { Pool } = require('pg');
 const dbParams = require('./lib/db.js');
 const db = new Pool(dbParams);
-db.connect();
+db.connect(function (err) {
+  if (!err) {
+    console.log("Database is connected ... nn");
+  } else {
+    console.log("Error connecting database ... nn");
+  }
+});
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -41,11 +50,13 @@ app.use(express.static("public"));
 // Note: Feel free to replace the example routes below with your own
 const usersRoutes = require("./routes/users");
 const widgetsRoutes = require("./routes/widgets");
+const mainRoutes = require("./routes/main")
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
+app.use("/main", mainRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 
@@ -56,16 +67,27 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/main/", (req, res) => {
-  res.render("main");
-});
-
-//Redirects back to login page when searching'/login'
-app.get('/login', (req, res) => {
-  req.session.user_id = req.params.id;
-  res.redirect('/main');
-});
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
+});
+
+
+
+io.on('connection', function (socket) {
+  console.log("a user connected at", socket.id);
+  socket.emit('news', { hello: 'world' });
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected')
+  })
+
+  socket.on('ready', function (data) {
+    console.log(data + ' sent from client');
+    socket.broadcast.emit('ready', data);
+
+  });
+
+  socket.on('click', function (data) {
+    console.log("Hello");
+  });
 });

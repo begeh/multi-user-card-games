@@ -18,8 +18,8 @@
 
   <!-- added in boostrap js below-->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous"></script>
 
 </head>
 
@@ -38,7 +38,7 @@
       </button>
     </nav>
   </div>
-  <main class= "row">
+  <main class="row">
     <section class="col-xs-6" id="welcome_scr">
       <h1> WELCOME TO GAMEBOARD</h1>
       <h2> Time to Play</h2>
@@ -48,18 +48,20 @@
     <section id="border">
 
     </section>
-    <section class= "col-xs" id="login">
+    <section class="col-xs" id="login">
       <h2> Login</h2>
-      <form action="/login" method="GET">
+      <form id="login-form" action="/main" method="POST">
         <p>Username</p>
         <input class="form-control" size='40' name='username' type="text" />
         <p>Password</p>
-        <input size='40' class='form-control' name= 'password' type="password" />
+        <input size='40' class='form-control' name='password' type="password" />
         <br>
         <input type="submit" class="btn btn-primary" value="Login" />
       </form>
       <a href='#' id="register"> Not registered yet? Click here</a>
+      <p id="error"></p>
     </section>
   </main>
 </body>
+
 </html>
