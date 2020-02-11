@@ -71,11 +71,8 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
-//Namespace stuff
-const goofSpace = io.of('/goofSpace')
-
-
 //Socket.io stuff goes here
+//Any console.logs here will log on the server side (on your computers terminal)
 io.on('connection', function (socket) {
   console.log("a user connected at", socket.id);
   socket.emit('news', { hello: 'world' });
@@ -83,19 +80,33 @@ io.on('connection', function (socket) {
   socket.on('disconnect', () => {
     console.log('a user disconnected')
   })
-
-  socket.on('ready', function (data) {
-    socket.broadcast.emit('ready', data);
-    console.log(data + ' sent from client');
-
-  });
-
-  socket.on('goof-join', function() {
+  //Room Stuff//
+  //Listens for the goof-join event sent from app.js
+  socket.on('goof-join', function () {
     socket.join('goofRoom')
     console.log(socket.id, " joined goofRoom")
-    io.sockets.in('goofRoom').emit("You", {You: "should only see this if you're in the room"})
-    // console.log(socket)
+    //Sends a message to the socket owner upon joining a room
+    io.to(`${socket.id}`).emit("userJoin", { welcome: "Welcome to goofRoom!" })
+    //Sends a message to everyone but the socket owner upon joining a room
+    socket.to('goofRoom').emit('ready', {send: socket.id});
   })
+  socket.on('goofReady', function (data) {
+    //Checks if the goofRoom exists
+    if (io.sockets.adapter.rooms.goofRoom) {
+      //Sets roomMembers to an object containing the socket.id's of everyone
+      //in goofRoom
+      const roomMembers = io.sockets.adapter.rooms.goofRoom.sockets
+      if (roomMembers[socket.id] === true) {
+        console.log("Users in room:\n", roomMembers)
+        console.log(data + ' with id ' + socket.id + ' sent ready while in goofRoom');
+      } else {
+        console.log(`User ${socket.id} tried to ready while not in room`)
+      }
+    } else {
+      console.log("Room does not exist")
+    }
+  });
+
 
 });
 
