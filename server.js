@@ -72,9 +72,19 @@ server.listen(PORT, () => {
 });
 
 
+
 io.on('connection', function (socket) {
+  console.log("a user connected");
   socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
+
+  socket.on('disconnect', () => {
+    console.log('a user disconnected')
+  })
+
+  socket.on('ready', function (data) {
     console.log(data);
   });
+  // socket.on('click', function (data) {
+  //   console.log("Hello");
+  // });
 });

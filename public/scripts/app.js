@@ -1,21 +1,13 @@
 
-
-
-
-
-
-
-
-
-
 // $(() => {
-//   $.ajax({
-//     method: "GET",
-//     url: "/api/users"
-//   }).done((users) => {
-//     for(user of users) {
-//       $("<div>").text(user.name).appendTo($("body"));
-//     }
-//   });;
+//   $("#ready").on('click', () => {
+//     alert("Hello")
+//   });
 // });
 
+    $(function () {
+      const socket = io();
+      $("#ready").on('click', () => {
+        socket.emit('ready', session.user_id)
+      });
+    })

@@ -17,6 +17,7 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
 
+
   <!-- added in boostrap js below-->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -29,11 +30,8 @@
     crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io.connect('localhost:8080');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
+
+    const socket = io();
   </script>
 
 </head>
@@ -167,7 +165,7 @@
 
         </div>
         <div id="middleRight" class="gamespace">
-          <button type="button" class="btn btn-primary">Ready</button>
+          <button type="button" class="btn btn-primary" id="ready">Ready</button>
         </div>
 
         <div id="p2Left" class="gamespace">P2 Points</div>

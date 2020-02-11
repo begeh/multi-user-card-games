@@ -14,7 +14,7 @@ module.exports = (db) => {
         if (req.body.password === result.rows[0].password) {
           const templateVars = {};
           templateVars.username = req.body.username;
-          req.session.user_id = req.params.id;
+          req.session.user_id = req.body.username;
           res.render('main', templateVars);
         } else {
           res.send("Wrong Password");
