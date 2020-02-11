@@ -72,7 +72,7 @@ server.listen(PORT, () => {
 });
 
 
-
+//Socket.io stuff goes here
 io.on('connection', function (socket) {
   console.log("a user connected at", socket.id);
   socket.emit('news', { hello: 'world' });
@@ -90,4 +90,12 @@ io.on('connection', function (socket) {
   socket.on('click', function (data) {
     console.log("Hello");
   });
+
+  //Room stuff
+  socket.on('goof-join', function () {
+    socket.join('goof-room')
+    console.log(socket.id, " joined goof-room")
+  })
 });
+
+
