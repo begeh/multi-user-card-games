@@ -74,7 +74,7 @@ server.listen(PORT, () => {
 
 
 io.on('connection', function (socket) {
-  console.log("a user connected");
+  console.log("a user connected at", socket.id);
   socket.emit('news', { hello: 'world' });
 
   socket.on('disconnect', () => {
@@ -82,9 +82,12 @@ io.on('connection', function (socket) {
   })
 
   socket.on('ready', function (data) {
-    console.log(data);
+    console.log(data + ' sent from client');
+    socket.broadcast.emit('ready', data);
+
   });
-  // socket.on('click', function (data) {
-  //   console.log("Hello");
-  // });
+
+  socket.on('click', function (data) {
+    console.log("Hello");
+  });
 });
