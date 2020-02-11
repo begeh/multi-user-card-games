@@ -30,17 +30,17 @@ CREATE TABLE games_db(
 
 -- HOW THIS WORKS:
 -- first five values are recorded at beginning of turn using calculations from previous turn
--- last 3 values are recorded at end of turn!
+-- last 3 values are recorded at end of turn
 
 CREATE TABLE turn_history (
   id SERIAL PRIMARY KEY NOT NULL,
   game_id INTEGER REFERENCES games_db(id) ON DELETE CASCADE,
   turn_no INTEGER NOT NULL,
-  p1_score INTEGER DEFAULT 0,
-  p2_score INTEGER DEFAULT 0,
-  p1_hand INTEGER [13],
-  p2_hand INTEGER [13],
-  dealer_hand INTEGER [13],
+  p1_score INTEGER DEFAULT 0 NOT NULL,
+  p2_score INTEGER DEFAULT 0 NOT NULL,
+  p1_hand INTEGER [],
+  p2_hand INTEGER [],
+  dealer_hand INTEGER [],
   p1_play INTEGER,
   p2_play INTEGER,
   dealer_play INTEGER
