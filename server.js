@@ -11,6 +11,9 @@ const app = express();
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 // PG database client/connection setup
 const { Pool } = require('pg');
 const dbParams = require('./lib/db.js');
@@ -64,6 +67,14 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
+});
+
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
 });
