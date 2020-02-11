@@ -27,14 +27,14 @@ body #not_header {
   }
 
   //css forfeit button container
-  #middleLeft{
+  #middleLeft {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   //css for ready button container
-  #middleRight{
+  #middleRight {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,13 +46,13 @@ body #not_header {
   }
 
   //css for 'P1 Played Cards' section of main page
-  #p1Right{
+  #p1Right {
     display: grid;
     grid-template-columns: repeat(7, 10%);
   }
 
   //css for images in 'P1 Played Cards' section of main page
-  #p1Right img{
+  #p1Right img {
     display: unset;
     max-height: 90px;
     width: auto;
@@ -60,20 +60,20 @@ body #not_header {
   }
 
   //css for 'P2 Played Cards' section of main page
-  #p2Right{
+  #p2Right {
     display: grid;
     grid-template-columns: repeat(7, 10%);
   }
 
   //css for images in 'P2 Played Cards' section of main page
-  #p2Right img{
+  #p2Right img {
     display: unset;
     max-height: 90px;
     width: auto;
     flex-wrap: inherit;
   }
 
-  #p1Left .points{
+  #p1Left .points {
     color: yellow;
     font-size: 30px;
     height: 100%;
@@ -81,7 +81,7 @@ body #not_header {
     padding-bottom: 5rem;
   }
 
-  #p2Left .points{
+  #p2Left .points {
     color: yellow;
     font-size: 30px;
     height: 100%;
@@ -128,13 +128,16 @@ body #not_header {
     flex-wrap: inherit;
   }
 
+  #rightSide #display #p2Hand img:hover {
+    border-style: solid;
+    border-color: yellow;
+  }
+
   #rightSide #display #middleHand {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: space-around;
-    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    justify-items: center;
+    align-items: center;
   }
 
   #rightSide #display #middleHand img {

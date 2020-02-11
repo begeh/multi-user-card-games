@@ -15,6 +15,19 @@ $(function () {
   socket.on('ready', function(data){
     console.log(data + " printed at each socket")
   })
+
+  $(".inplay").click((element)=>{
+    element.preventDefault();
+    $("#middleHand #yourplay").replaceWith($(event.target));
+    $(event.target).attr('class', 'beenplayed');
+    $("#middleHand").append('<div id="yourplay"><div>');
+    // $("#p2Right").append($(event.target));
+ });
+
+$("#ready").click((element) =>{
+  $("#p2Right").append($(".beenplayed"));
+});
+
 })
 
 // $(function () {
