@@ -1,5 +1,12 @@
 
 $(function () {
+
+  const escape = function (str) {
+    let div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  };
+
   const boardListener = function () {
     //when player clicks on a card, it is moved to the middle of game board for play
     $(".inplay img").click((event) => {
