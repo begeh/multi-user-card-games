@@ -292,6 +292,7 @@ $(function () {
     //Only loads the board AND cards if there are two players in the room
     if (data.length > 1) {
       console.log("board should load")
+      socket.emit('playerReady')
       $("#rightSide").empty();
       $("#rightSide").append(newBoard());
       boardListener();
