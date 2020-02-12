@@ -84,11 +84,13 @@ io.on('connection', function (socket) {
   //Listens for the goof-join event sent from app.js
   socket.on('goof-join', function () {
     socket.join('goofRoom')
+    //Emits an object containing the sockets in goofRoom
+    io.in("goofRoom").emit("loadGoofBoard", io.sockets.adapter.rooms.goofRoom)
     console.log(socket.id, " joined goofRoom")
     //Sends a message to the socket owner upon joining a room
     io.to(`${socket.id}`).emit("userJoin", { welcome: "Welcome to goofRoom!" })
     //Sends a message to everyone but the socket owner upon joining a room
-    socket.to('goofRoom').emit('ready', {send: socket.id});
+    socket.to('goofRoom').emit('ready', socket.id);
   })
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists
