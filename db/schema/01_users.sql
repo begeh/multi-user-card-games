@@ -43,5 +43,6 @@ CREATE TABLE turn_history (
   dealer_hand INTEGER [],
   p1_play INTEGER,
   p2_play INTEGER,
-  dealer_play INTEGER
+  dealer_play INTEGER,
+  forfeit INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
