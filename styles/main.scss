@@ -135,7 +135,7 @@ body #not_header {
 
   #rightSide #display #middleHand {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
   }
@@ -144,11 +144,6 @@ body #not_header {
     max-height: 100px;
     max-width: auto;
   }
-
-  // #rightSide #display #middleHand img:hover .inplay{
-  //   border-style: solid;
-  //   border-color: yellow;
-  // }
 
 }
 
