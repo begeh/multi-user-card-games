@@ -81,14 +81,52 @@ io.on('connection', function (socket) {
     console.log('a user disconnected')
   })
   //Room Stuff//
-  //Listens for the goof-join event sent from app.js
-  socket.on('goof-join', function () {
+
+  //Joins the socket to the room goofRoom when called
+  const joinGoofRoom = function (playerName) {
+    //If room does not exist, it will be created before joining the socket
     socket.join('goofRoom')
-    console.log(socket.id, " joined goofRoom")
+    console.log(`${playerName} with id ${socket.id} joined goofRoom`)
     //Sends a message to the socket owner upon joining a room
-    io.to(`${socket.id}`).emit("userJoin", { welcome: "Welcome to goofRoom!" })
+    io.to(`${socket.id}`).emit("userJoin", "Welcome to goofRoom!")
     //Sends a message to everyone but the socket owner upon joining a room
-    socket.to('goofRoom').emit('ready', {send: socket.id});
+    socket.to('goofRoom').emit('ready', playerName);
+    //Emits an object containing the sockets in goofRoom
+    io.in("goofRoom").emit("loadGoofBoard", io.sockets.adapter.rooms.goofRoom)
+  }
+
+  //Can use a class (RoomMaker) to keep track on the server side of which users are in a room
+  //When both users are in a room and ready to play, create a new RoomMaker object
+  //It will contain an id of the room. the id of the game and each players name
+  //When somone clicks to join a goofspiel room:
+  class RoomMaker {
+    constructor(room_name, game_id, p1, p2){
+      room_name, //Name of the room
+      game_id, //id of the game to reference in the database
+      p1, //p1 name
+      p2  //p2 name
+    }
+  }
+
+  //Listens for the goof-join event sent from app.js
+  socket.on('goof-join', function (playerName) {
+    //If room does not exist:
+    if (!io.sockets.adapter.rooms.goofRoom) {
+      joinGoofRoom(playerName)
+    } else {
+      //If user is already in the room
+      if (true === io.sockets.adapter.rooms.goofRoom.sockets[`${socket.id}`]){
+        console.log("User tried to join room they are already in")
+        io.to(`${socket.id}`).emit("alreadyJoined", io.sockets.adapter.rooms)
+      }
+      else if (io.sockets.adapter.rooms.goofRoom.length >= 3) {
+        console.log(socket.id, " tried to join a full room")
+        socket.emit('roomFull')
+      } else {
+        joinGoofRoom(playerName)
+      }
+    }
+
   })
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists
