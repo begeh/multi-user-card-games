@@ -29,33 +29,33 @@ $(function () {
     }
   }
 
-  let dealerPlayed = [];
+  // let dealerPlayed = [];
 
-  const playingCards = {
-    1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
-    2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
-    3: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/3H.png?raw=true',
-    4: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/4H.png?raw=true',
-    5: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/5H.png?raw=true',
-    6: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/6H.png?raw=true',
-    7: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/7H.png?raw=true',
-    8: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/8H.png?raw=true',
-    9: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/9H.png?raw=true',
-    10: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/10H.png?raw=true',
-    11: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/11H.png?raw=true',
-    12: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/12H.png?raw=true',
-    13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
-  };
+  // const playingCards = {
+  //   1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
+  //   2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
+  //   3: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/3H.png?raw=true',
+  //   4: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/4H.png?raw=true',
+  //   5: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/5H.png?raw=true',
+  //   6: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/6H.png?raw=true',
+  //   7: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/7H.png?raw=true',
+  //   8: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/8H.png?raw=true',
+  //   9: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/9H.png?raw=true',
+  //   10: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/10H.png?raw=true',
+  //   11: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/11H.png?raw=true',
+  //   12: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/12H.png?raw=true',
+  //   13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
+  // };
 
-  const dealerCard = () => {
-    let deal;
-    while (!dealerPlayed.includes(deal)) {
-      deal = Math.roundUp(Math.random() * 13);
-    }
+  // const dealerCard = () => {
+  //   let deal;
+  //   while (!dealerPlayed.includes(deal)) {
+  //     deal = Math.roundUp(Math.random() * 13);
+  //   }
 
-    dealerPlayed.push(deal);
-    return deal;
-  }
+  //   dealerPlayed.push(deal);
+  //   return deal;
+  // }
 
   const boardListener = function () {
     //when player clicks on a card, it is moved to the middle of game board for play
@@ -82,8 +82,8 @@ $(function () {
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
         $("#p1Right").append($("#p1Hand img:last-child"));
-        console.log(dealerCard());
-        ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerPlayed()]}>`);
+        // console.log(dealerCard());
+        // ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerPlayed()]}>`);
       }
     });
   }
