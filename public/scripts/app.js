@@ -1,15 +1,5 @@
 
 $(function () {
-  const name = $('#user-name u strong').text();
-  const socket = io.connect('http://localhost:8080');
-  $("#ready").on('click', () => {
-    socket.emit('ready', name)
-  });
-
-  socket.on('ready', function (data) {
-    console.log(data + " printed at each socket")
-  })
-
   const boardListener = function () {
     //when player clicks on a card, it is moved to the middle of game board for play
     $(".inplay").click((event) => {
