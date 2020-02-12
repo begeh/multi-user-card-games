@@ -7,6 +7,52 @@ $(function () {
     return div.innerHTML;
   };
 
+  const cardVal = () => {
+    switch ($('.beenplayed').attr('id')) {
+      case 'ace': return 1;
+      case 'card2': return 2;
+      case 'card3': return 3;
+      case 'card4': return 4;
+      case 'card5': return 5;
+      case 'card6': return 6;
+      case 'card7': return 7;
+      case 'card8': return 8;
+      case 'card9': return 9;
+      case 'card10': return 10;
+      case 'jack': return 11;
+      case 'queen': return 12;
+      case 'king': return 13;
+    }
+  }
+
+  let dealerPlayed = [];
+
+  const playingCards = {
+    1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
+    2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
+    3: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/3H.png?raw=true',
+    4: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/4H.png?raw=true',
+    5: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/5H.png?raw=true',
+    6: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/6H.png?raw=true',
+    7: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/7H.png?raw=true',
+    8: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/8H.png?raw=true',
+    9: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/9H.png?raw=true',
+    10: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/10H.png?raw=true',
+    11: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/11H.png?raw=true',
+    12: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/12H.png?raw=true',
+    13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
+  };
+
+  const dealerCard = () => {
+    let deal;
+    while (!dealerPlayed.includes(deal)) {
+      deal = Math.roundUp(Math.random() * 13);
+    }
+
+    dealerPlayed.push(deal);
+    return deal;
+  }
+
   const boardListener = function () {
     //when player clicks on a card, it is moved to the middle of game board for play
     $(".inplay img").click((event) => {
@@ -27,10 +73,13 @@ $(function () {
     $("#ready").click((element) => {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
+        $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
-       $("#p1Right").append($("#p1Hand img:last-child"));
+        $("#p1Right").append($("#p1Hand img:last-child"));
+        console.log(dealerCard());
+        ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerPlayed()]}>`);
       }
     });
   }
@@ -73,7 +122,7 @@ $(function () {
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
       <div id="opponent-play"></div>
-      <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
+      <div id="dealer-play"></div>
         <div id="yourplay"></div>
       </div>
       <div id="middleRight" class="gamespace">
