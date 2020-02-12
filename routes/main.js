@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-
-
 module.exports = (db) => {
   router.get("/", (req, res) => {
     res.render("main");
   });
 
   router.post('/', (req, res) => {
-    db.query(`SELECT * FROM users WHERE username = $1;`, [req.body.username])
+    db.query(`SELECT * FROM users WHERE username = $1;`, [escape(req.body.username)])
       .then(result => {
         if (req.body.password === result.rows[0].password) {
           const templateVars = {};
