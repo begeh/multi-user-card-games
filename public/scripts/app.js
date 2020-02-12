@@ -134,8 +134,8 @@ $(function () {
     </div>
 `;
 
-const newFrame = () =>
-`<div id="display">
+  const newFrame = () =>
+    `<div id="display">
   <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
   <div id="p1Left" class="gamespace">P1 Points
     <p class="points">0</p>
@@ -193,14 +193,26 @@ const newFrame = () =>
   //Watches for the goofspiel new game item is clicked, then emits a
   //a goof-join event that is caught in server.js
   $("#goof").on('click', () => {
+    //Prompts the user to confirm room join
+    if (confirm("Join Goofspiel room?")) {
     socket.emit('goof-join')
     console.log("Attemping goofRoom join")
+    }
   });
+  //Aelrts the client if they are already in the room they are trying to join
+  socket.on("alreadyJoined", (data) => {
+    console.log(data)
+    alert("You are already in this room")
+  })
+
+  socket.on('roomFull') {
+    alert("The room is full.")
+  }
 
   //Logs to the clients browsers console. Can be communicated
   //to the user in a better way, decide during group merge discussion
   socket.on('userJoin', function (data) {
-    console.log(data.welcome)
+    console.log(data)
   })
 
   //Listens for the user to hit the ready button
@@ -221,16 +233,19 @@ const newFrame = () =>
   socket.on("loadGoofBoard", (data) => {
     console.log(data.length)
     console.log(data.sockets)
+
     //Only loads the board AND cards if there are two players in the room
     if (data.length > 1) {
       console.log("board should load")
       $("#rightSide").empty();
       $("#rightSide").append(newBoard());
       boardListener();
-    //Loads the frame of the play area
+      //Loads the frame of the play area
     } else {
       $("#rightSide").append(newFrame());
+
     }
+
   })
 
 
