@@ -138,6 +138,6 @@ $(function () {
   $("#forfeit").click((event) => {
     event.preventDefault();
     $("#display").replaceWith(newBoard());
+    $("#rightSide #display").css('opacity', '0.3');
   });
-
 })
