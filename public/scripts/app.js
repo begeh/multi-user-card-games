@@ -2,7 +2,7 @@
 $(function () {
   const boardListener = function () {
     //when player clicks on a card, it is moved to the middle of game board for play
-    $(".inplay").click((event) => {
+    $(".inplay img").click((event) => {
       event.preventDefault();
       if ($("#yourplay").html() == "") {
         $("#middleHand #yourplay").replaceWith($(event.target).parent());
@@ -12,21 +12,19 @@ $(function () {
         $("#p2Hand").append($(".beenplayed"));
         $('.beenplayed').removeClass('beenplayed');
         $("#middleHand").append($(event.target).parent());
-        $(event.target).parent().addClass('beenplayed');
+        ($(event.target).parent()).addClass('beenplayed');
       }
     });
 
-    //when ready button is clicked, players inplay hand goes to played cards sections
+    //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
     $("#ready").click((element) => {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
-        $("#p2Right").append($(".beenplayed").children());
+        $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
+       $("#p1Right").append($("#p1Hand img:last-child"));
       }
-      // if ($("#p2Hand a").length == 0) {
-      //   $('#ready').replaceWith('<button type = "button" class= "btn btn-primary>New Game</button>');
-      // }
     });
   }
 
@@ -67,7 +65,8 @@ $(function () {
       </div>
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
-        <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
+      <div id="opponent-play"></div>
+      <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
         <div id="yourplay"></div>
       </div>
       <div id="middleRight" class="gamespace">
