@@ -195,8 +195,8 @@ $(function () {
   $("#goof").on('click', () => {
     //Prompts the user to confirm room join
     if (confirm("Join Goofspiel room?")) {
-    socket.emit('goof-join')
-    console.log("Attemping goofRoom join")
+      socket.emit('goof-join', name)
+      console.log("Attemping goofRoom join")
     }
   });
   //Aelrts the client if they are already in the room they are trying to join
@@ -205,27 +205,28 @@ $(function () {
     alert("You are already in this room")
   })
 
-  socket.on('roomFull') {
+  socket.on('roomFull', () => {
     alert("The room is full.")
-  }
+  })
 
   //Logs to the clients browsers console. Can be communicated
   //to the user in a better way, decide during group merge discussion
   socket.on('userJoin', function (data) {
-    console.log(data)
+    alert(data)
   })
 
   //Listens for the user to hit the ready button
   //Ready button should not be displayed until a game is loaded, will
   //dicuss this during the group merge
-  $("#ready").on('click', () => {
-    socket.emit('goofReady', name)
-  });
+  //no longer works
+  // $("#ready").on('click', () => {
+  //   socket.emit('goofReady', name)
+  // });
 
   //Logs to the clients browsers console. Can be communicated
   //to the user in a better way, decide during group merge discussion
-  socket.on('ready', function (data) {
-    console.log(data + " joined the room")
+  socket.on('ready', (data) => {
+    alert(data + " joined the room")
   })
 
   //Recievs an object containing the socket.id of all users in
