@@ -31,21 +31,21 @@ $(function () {
 
   // let dealerPlayed = [];
 
-  // const playingCards = {
-  //   1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
-  //   2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
-  //   3: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/3H.png?raw=true',
-  //   4: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/4H.png?raw=true',
-  //   5: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/5H.png?raw=true',
-  //   6: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/6H.png?raw=true',
-  //   7: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/7H.png?raw=true',
-  //   8: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/8H.png?raw=true',
-  //   9: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/9H.png?raw=true',
-  //   10: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/10H.png?raw=true',
-  //   11: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/11H.png?raw=true',
-  //   12: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/12H.png?raw=true',
-  //   13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
-  // };
+  const playingCards = {
+    1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
+    2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
+    3: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/3H.png?raw=true',
+    4: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/4H.png?raw=true',
+    5: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/5H.png?raw=true',
+    6: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/6H.png?raw=true',
+    7: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/7H.png?raw=true',
+    8: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/8H.png?raw=true',
+    9: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/9H.png?raw=true',
+    10: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/10H.png?raw=true',
+    11: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/11H.png?raw=true',
+    12: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/12H.png?raw=true',
+    13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
+  };
 
   // const dealerCard = () => {
   //   let deal;
@@ -93,7 +93,7 @@ $(function () {
   const newBoard = () =>
     `<div id="display">
       <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
-      <div id="p1Left" class="gamespace">P1 Points
+      <div id="p1Left" class="gamespace">Opponent's Points
         <p class="points">0</p>
       </div>
 
@@ -126,14 +126,16 @@ $(function () {
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
       <div id="opponent-play"></div>
-      <div id="dealer-play"></div>
+      <div id="dealer-play">
+      <div></div>
+      </div>
         <div id="yourplay"></div>
       </div>
       <div id="middleRight" class="gamespace">
         <button type="button" class="btn btn-primary" id="ready">Ready</button>
       </div>
 
-      <div id="p2Left" class="gamespace">P2 Points
+      <div id="p2Left" class="gamespace">Your Points
         <p class="points">0</p>
       </div>
       <!-- p2Hand will be populated by jquery inserts -->
@@ -303,6 +305,13 @@ $(function () {
     }
 
   })
+
+  socket.on("deal", (data => {
+    const dealt = playingCards[data];
+    console.log(socket.id)
+    $('#dealer-play').children().replaceWith(`<img src="${dealt}">`);
+  })
+  );
 
 
 })

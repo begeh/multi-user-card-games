@@ -112,7 +112,8 @@ io.on('connection', function (socket) {
     if (!io.sockets.adapter.rooms.goofRoom) {
       joinGoofRoom(playerName)
       roomInfo['goof'] = {
-        players: [playerName]
+        players: [playerName],
+        id: [socket.id]
       };
       console.log(roomInfo)
     } else {
@@ -127,6 +128,7 @@ io.on('connection', function (socket) {
       } else {
         joinGoofRoom(playerName)
         roomInfo['goof'].players.push(playerName);
+        roomInfo['goof'].id.push(socket.id);
         console.log(roomInfo)
 
         // INITIALIZEGAME
@@ -155,6 +157,9 @@ io.on('connection', function (socket) {
       // console.log(gameData);
       const gameState = new Turn(gameData[gameData.length - 1]);
       console.log(gameState);
+      gameState.dealer.deal();
+      console.log(gameState.dealer.played);
+      io.in('goofRoom').emit('deal', gameState.dealer.played)
     })();
     }
   })
