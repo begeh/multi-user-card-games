@@ -8,21 +8,39 @@ $(function () {
     return div.innerHTML;
   };
 
+  // const cardVal = () => {
+  //   switch ($('.beenplayed').attr('id')) {
+  //     case 'ace': return 1;
+  //     case 'card2': return 2;
+  //     case 'card3': return 3;
+  //     case 'card4': return 4;
+  //     case 'card5': return 5;
+  //     case 'card6': return 6;
+  //     case 'card7': return 7;
+  //     case 'card8': return 8;
+  //     case 'card9': return 9;
+  //     case 'card10': return 10;
+  //     case 'jack': return 11;
+  //     case 'queen': return 12;
+  //     case 'king': return 13;
+  //   }
+  // }
+
   const cardVal = () => {
-    switch ($('.beenplayed').attr('id')) {
-      case 'ace': return 1;
-      case 'card2': return 2;
-      case 'card3': return 3;
-      case 'card4': return 4;
-      case 'card5': return 5;
-      case 'card6': return 6;
-      case 'card7': return 7;
-      case 'card8': return 8;
-      case 'card9': return 9;
-      case 'card10': return 10;
-      case 'jack': return 11;
-      case 'queen': return 12;
-      case 'king': return 13;
+    switch ($('#dealer-play img').attr('id')) {
+      case '1': return 1;
+      case '2': return 2;
+      case '3': return 3;
+      case '4': return 4;
+      case '5': return 5;
+      case '6': return 6;
+      case '7': return 7;
+      case '8': return 8;
+      case '9': return 9;
+      case '10': return 10;
+      case '11': return 11;
+      case '12': return 12;
+      case '13': return 13;
     }
   }
 
@@ -51,7 +69,8 @@ $(function () {
   };
 
   const boardListener = function () {
-    ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerCard()]}>`)
+    let deal = dealerCard();
+    ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
     //when player clicks on a card, it is moved to the middle of game board for play
     $(".inplay img").click((event) => {
       event.preventDefault();
@@ -71,13 +90,15 @@ $(function () {
     $("#ready").click((element) => {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
-        $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
+        console.log($('#dealer-play').attr('id'), typeof $('#dealer-play img').attr('id'));
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
         $("#p1Right").append($("#p1Hand img:last-child"));
+        $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
         if(dealerPlayed.length > 0){
-          ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerCard()]}>`);
+          let dealedCard = dealerCard();
+          ($('#dealer-play').children()).replaceWith(`<img id=${dealedCard} src = ${playingCards[dealedCard]}>`);
         } else{
           ($('#dealer-play').children()).replaceWith(`<div></div>`)
         }
