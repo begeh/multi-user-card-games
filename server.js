@@ -179,7 +179,7 @@ io.on('connection', function (socket) {
     console.log(count)
 
 
-    if (Object.keys(count).length === 1){
+    if (Object.keys(count).length === 1) {
       io.in("goofRoom").emit("opponentReady");
     }
     else if (Object.keys(count).length === 2) {
@@ -205,22 +205,30 @@ io.on('connection', function (socket) {
       count = {};
       io.in("goofRoom").emit("results", winner)
 
+      //On game end
       if (dealerPlayed.length === 0) {
-        if (Object.keys(score).length === 1){
-          //One person won every game
+        if (Object.keys(score).length === 1 && score.draw) {
+          io.in("goofRoom").emit("goofComplete", null)
+        }
+        //If one person won every round
+        else if (Object.keys(score).length === 1) {
           io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+          //If both players won a round
         } else {
-          if(score[Object.keys(score)[0]] > score[Object.keys(score)[1]] ){
+          if (score[Object.keys(score)[0]] > score[Object.keys(score)[1]]) {
             io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
-          } else {
+          } else if (score[Object.keys(score)[0]] < score[Object.keys(score)[1]]) {
             io.in("goofRoom").emit("goofComplete", Object.keys(score)[1])
+          } else {
+            io.in("goofRoom").emit("goofComplete", null)
+
           }
         }
 
 
       } else {
-      deal = dealerCard()
-      io.in("goofRoom").emit("dealerCard", deal)
+        deal = dealerCard()
+        io.in("goofRoom").emit("dealerCard", deal)
       }
 
       // io.in("goofRoom").emit("scoreUpdate", count)

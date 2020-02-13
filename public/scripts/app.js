@@ -105,7 +105,7 @@ $(function () {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
         console.log("Someone sent data:", name, playerCardVal())
-        socket.emit('readyClicked', { name, val: playerCardVal()});
+        socket.emit('readyClicked', { name, val: playerCardVal() });
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
@@ -114,27 +114,26 @@ $(function () {
         // changes the score value based on dealer card
 
         //checks if all dealer cards have been played yet. if not, then randomly draws another one. else, it updates score and exits
-      //   socket.on("dealerPlayed", (dealerPlayed) => {
-      //     if (dealerPlayed.length > 0) {
-      //       let dealedCard = dealerCard();
-      //       ($('#dealer-play').children()).replaceWith(`<img id=${dealedCard} src = ${playingCards[dealedCard]}>`);
-      //     } else {
-      //       ($('#dealer-play').children()).replaceWith(`<div></div>`)
-      //     }
-      //   });
+        //   socket.on("dealerPlayed", (dealerPlayed) => {
+        //     if (dealerPlayed.length > 0) {
+        //       let dealedCard = dealerCard();
+        //       ($('#dealer-play').children()).replaceWith(`<img id=${dealedCard} src = ${playingCards[dealedCard]}>`);
+        //     } else {
+        //       ($('#dealer-play').children()).replaceWith(`<div></div>`)
+        //     }
+        //   });
       }
     });
 
   }
 
-  socket.on('results', (data) =>{
+  socket.on('results', (data) => {
     console.log(data)
-    if(data.name === name)
-    {
+    if (data.name === name) {
       console.log(Number($("#p2Left p").text()) + data.val)
       $("#p2Left p").text(Number($("#p2Left p").text()) + data.val);
-    } else if (data.name === 'draw'){
-    } else{
+    } else if (data.name === 'draw') {
+    } else {
       console.log(Number($("#p1Left p").text()) + data.val)
       $("#p1Left p").text(Number($("#p1Left p").text()) + data.val);
     }
@@ -146,10 +145,14 @@ $(function () {
   })
 
   socket.on("goofComplete", (data) => {
-    if(data === name){
-      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>WINNER</p>`);
-    } else{
-      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
+    if (data === null) {
+      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DRAW</p>`);
+    } else {
+      if (data === name) {
+        $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>WINNER</p>`);
+      } else {
+        $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
+      }
     }
 
 
