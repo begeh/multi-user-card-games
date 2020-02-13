@@ -72,7 +72,7 @@ $(function () {
     let deal = dealerCard();
     ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
     //when player clicks on a card, it is moved to the middle of game board for play
-    $(".inplay img").click((event) => {
+    $("#p2Hand .inplay").click((event) => {
       event.preventDefault();
       if ($("#yourplay").html() == "") {
         $("#middleHand #yourplay").replaceWith($(event.target).parent());
@@ -90,7 +90,6 @@ $(function () {
     $("#ready").click((element) => {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
-        console.log($('#dealer-play').attr('id'), typeof $('#dealer-play img').attr('id'));
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
