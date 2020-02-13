@@ -74,8 +74,12 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
+
+// vvv THESE NEED TO BE GLOBAL OR IT SHALL NO WORKY vvv
 const roomInfo = {};
 let gameState = null;
+// ^^^ NE TOUCHEZ PAS ^^^
+
 //Socket.io stuff goes here
 //Any console.logs here will log on the server side (on your computers terminal)
 io.on('connection', function (socket) {
@@ -182,9 +186,16 @@ io.on('connection', function (socket) {
           console.log("nope");
           return;
         }
-        const resolve = gameState.resolveTurn();
-        console.log(resolve);
+        const resolved = gameState.resolveTurn();
+        console.log(resolved);
+        if (resolved) {
+          //write to database
+          //check if turn + 1 is 13 or over (we start from 0),
+          //if so run from COMMENT XXX
+          //else do final write and end the game
+        }
       })
+      //to add here: forfeit functionality <-- gee willickers i wish i could forfeit my functionality rn lol amirite
     })();
     })
 
