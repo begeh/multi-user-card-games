@@ -75,6 +75,7 @@ server.listen(PORT, () => {
 });
 
 const roomInfo = {};
+let gameState = null;
 //Socket.io stuff goes here
 //Any console.logs here will log on the server side (on your computers terminal)
 io.on('connection', function (socket) {
@@ -147,31 +148,36 @@ io.on('connection', function (socket) {
 
   })
 
-  let gameState;
+
+
 
   socket.on("playerReady", () => {
+    (async function () {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
-      (async function () {
         const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
         // console.log(Game);
         const gameData = await getGameData(Game);
-        // console.log(gameData);
+        io.in('goofRoom').emit('gameData', gameData[gameData.length - 1]);
         gameState = new Turn(gameData[gameData.length - 1]);
-        console.log(gameState);
+        // console.log(gameState);
         gameState.dealer.deal();
-        console.log(gameState.dealer.played);
-        io.in('goofRoom').emit('deal', gameState.dealer.played)
-        listener();
-      })();
-    }
-  })
+        // console.log(gameState.dealer.played);
+        io.in('goofRoom').emit('deal', gameState.dealer.played);
 
-  const listener = () => {
-    socket.on('readyClicked', data => {
-    console.log(gameState);
-  })
-}
+        //await responses
+
+      }
+      socket.on('readyClicked', data => {
+        console.log(data);
+        console.log(gameState);
+      })
+    })();
+    })
+
+
+
+
 
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists

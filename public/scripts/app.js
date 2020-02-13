@@ -1,3 +1,4 @@
+// const { Turn } = require('../../lib/goofspiel-scripts/game-logic-classes');
 
 $(function () {
 
@@ -307,16 +308,19 @@ $(function () {
 
   })
 
-  socket.on("deal", (data => {
-    const dealt = playingCards[data];
-    console.log(socket.id)
-    $('#dealer-play').children().replaceWith(`<img src="${dealt}">`);
-  })
-  );
+
+    // socket.on("gameData", (data => {
+    //   const gameState = data;
+    //   console.log(gameState);
+    //   })
+    // )
+    socket.on('deal', (deal) => {
+      const dealt = playingCards[`${deal}`];
+      console.log(dealt);
+      $('#dealer-play').children().replaceWith(`<img src="${dealt}">`);
+    })
+
+
 
 
 })
-
-
-
-
