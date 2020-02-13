@@ -136,7 +136,11 @@ $(function () {
         $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
+    setTimeout(()=> {
 
+      location.reload()
+
+    }, 3000)
   });
 
   boardListener();

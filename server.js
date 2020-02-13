@@ -10,6 +10,7 @@ const sass = require("node-sass-middleware");
 const app = express();
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
+const request = require('request');
 
 const { newGame } = require('./lib/goofspiel-scripts/newGame-function')
 const { getGameData } = require('./lib/goofspiel-scripts/getGameData-function')
@@ -83,8 +84,7 @@ server.listen(PORT, () => {
 
 
 
-let dealerPlayed = [1]
-//  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const dealerCard = () => {
   let index = Math.floor(Math.random() * dealerPlayed.length);
   let deal = dealerPlayed.splice(index, 1)[0];
@@ -103,6 +103,9 @@ const turnEval = (p1, p2) => {
 
 let count = {};
 const score = {};
+// function reloader() {
+//   location.reload();
+// }
 
 
 const roomInfo = {};
@@ -233,22 +236,8 @@ io.on('connection', function (socket) {
 
           }
         }
-
-        setTimeout(function () {
-          console.log("timeout fired")
-          app.get("/", (req, res) => {
-            // if (req.session.user_id) {
-            //   const templateVars = {};
-            //   templateVars.username = req.body.username;
-            //   req.session.user_id = req.body.username;
-            //   res.render('main', templateVars);
-            // } else {
-            //   console.log("app.get fired but nothing rendered")
-            // }
-            console.log("get fired")
-            res.redirect('back');
-            res.render('main');
-          }) }, 3000);
+        //Resets the dealer deck
+        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
       } else {
         deal = dealerCard()
