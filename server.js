@@ -130,18 +130,6 @@ io.on('connection', function (socket) {
         roomInfo['goof'].players.push(playerName);
         roomInfo['goof'].id.push(socket.id);
         console.log(roomInfo)
-
-        // INITIALIZEGAME
-
-        // (async function() {
-        //   const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
-        //   console.log(Game, " RUN ONCE");
-        // const gameData = await getGameData(Game);
-
-        // console.log(gameData);
-        // const gameState = new Turn(gameData);
-
-        // })();
       }
     }
 
@@ -152,18 +140,7 @@ io.on('connection', function (socket) {
   socket.on("playerReady", () => {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
-      (async function () {
-        const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
-        // console.log(Game);
-        const gameData = await getGameData(Game);
-        // console.log(gameData);
-        gameState = new Turn(gameData[gameData.length - 1]);
-        console.log(gameState);
-        gameState.dealer.deal();
-        console.log(gameState.dealer.played);
-        io.in('goofRoom').emit('deal', gameState.dealer.played)
-        listener();
-      })();
+
     }
   })
 
