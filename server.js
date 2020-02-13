@@ -170,7 +170,20 @@ io.on('connection', function (socket) {
       }
       socket.on('readyClicked', data => {
         console.log(data);
-        console.log(gameState);
+        if(data.name === gameState.player1.username) {
+          gameState.player1.play(data.val);
+          gameState.player1.isReady();
+          console.log(gameState.player1);
+        } else if (data.name === gameState.player2.username) {
+          gameState.player2.play(data.val);
+          gameState.player2.isReady();
+          console.log(gameState.player2);
+        } else {
+          console.log("nope");
+          return;
+        }
+        const resolve = gameState.resolveTurn();
+        console.log(resolve);
       })
     })();
     })
