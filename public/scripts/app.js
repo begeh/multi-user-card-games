@@ -51,6 +51,7 @@ $(function () {
   };
 
   const boardListener = function () {
+    ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerCard()]}>`)
     //when player clicks on a card, it is moved to the middle of game board for play
     $(".inplay img").click((event) => {
       event.preventDefault();
@@ -75,7 +76,11 @@ $(function () {
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
         $("#p1Right").append($("#p1Hand img:last-child"));
-        ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerCard()]}>`);
+        if(dealerPlayed.length > 0){
+          ($('#dealer-play').children()).replaceWith(`<img src = ${playingCards[dealerCard()]}>`);
+        } else{
+          ($('#dealer-play').children()).replaceWith(`<div></div>`)
+        }
       }
     });
   }
@@ -118,7 +123,7 @@ $(function () {
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
       <div id="opponent-play"></div>
-      <div id="dealer-play"></div>
+      <div id="dealer-play"><div></div></div>
         <div id="yourplay"></div>
       </div>
       <div id="middleRight" class="gamespace">
