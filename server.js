@@ -74,11 +74,7 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
-const dealerCard = () => {
-  let index = Math.floor(Math.random() * dealerPlayed.length);
-  let deal = dealerPlayed.splice(index, 1);
-  return deal;
-};
+
 
 const roomInfo = {};
 //Socket.io stuff goes here
@@ -147,16 +143,31 @@ io.on('connection', function (socket) {
   socket.on("playerReady", () => {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
+
+      let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      const dealerCard = () => {
+        let index = Math.floor(Math.random() * dealerPlayed.length);
+        let deal = dealerPlayed.splice(index, 1);
+        return deal;
+      };
+
       deal = dealerCard()
       io.in("goofRoom").emit("dealerCard", deal)
+      socket.on("readyClicked", (data) => {
+
+        console.log(data)
+        // io.in("goofRoom").emit("dealerPlayed", dealerPlayed)
+      })
+
+
     }
   })
 
-  const listener = () => {
-    socket.on('readyClicked', data => {
-    console.log(gameState);
-  })
-}
+//   const listener = () => {
+//     socket.on('readyClicked', data => {
+//     console.log(gameState);
+//   })
+// }
 
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists
