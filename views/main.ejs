@@ -17,7 +17,6 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript" src="/scripts/goofspiel.js"></script>
 
 
 
@@ -116,102 +115,6 @@
 
     </section>
     <section id="rightSide">
-      <h4>Play Area</h4>
-      <div id="display">
-        <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
-        <div id="p1Left" class="gamespace">P1 Points
-          <p class="points">0</p>
-        </div>
-
-        <!-- p1Hand will be populated by jquery inserts -->
-        <div id="p1Hand" class="gamespace">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-        </div>
-        <div class="gamespace">
-          P1 Played Cards
-          <div id="p1Right">
-
-          </div>
-        </div>
-
-        <div id="middleLeft" class="gamespace">
-          <button type="button" id ="forfeit" class="btn btn-danger">Forfeit</button>
-        </div>
-        <!-- middleHand will be populated by jquery inserts -->
-        <div id="middleHand" class="gamespace">
-          <div id="opponent-play"></div>
-          <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
-          <div id="yourplay"></div>
-        </div>
-        <div id="middleRight" class="gamespace">
-          <button type="button" class="btn btn-primary" id="ready">Ready</button>
-        </div>
-
-        <div id="p2Left" class="gamespace">P2 Points
-          <p class="points">0</p>
-        </div>
-        <!-- p2Hand will be populated by jquery inserts -->
-        <div id="p2Hand" class="gamespace">
-          <a id="ace" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/14S.png?raw=true">
-          </a>
-          <a id="card2" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/2S.png?raw=true">
-          </a>
-          <a id="card3" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/3S.png?raw=true">
-          </a>
-          <a id="card4" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/4S.png?raw=true">
-          </a>
-          <a id="card5" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/5S.png?raw=true">
-          </a>
-          <a id="card6" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/6S.png?raw=true">
-          </a>
-          <a id="card7" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/7S.png?raw=true">
-          </a>
-          <a id="card8" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/8S.png?raw=true">
-          </a>
-          <a id="card9" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/9S.png?raw=true">
-          </a>
-          <a href="#" class="inplay" id="card10">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/10S.png?raw=true">
-          </a>
-          <a id="jack" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/11S.png?raw=true">
-          </a>
-          <a id="queen" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/12S.png?raw=true">
-          </a>
-          <a id="king" class="inplay" href="#">
-            <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/13S.png?raw=true">
-          </a>
-        </div>
-        <div class="gamespace">
-          P2 Played Cards
-          <div id="p2Right">
-
-          </div>
-
-        </div>
-      </div>
 
     </section>
   </div>

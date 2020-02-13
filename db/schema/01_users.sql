@@ -3,7 +3,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS games_db CASCADE;
 DROP TABLE IF EXISTS turn_history CASCADE;
-
+DROP TABLE IF EXISTS cards CASCADE;
 
 -- USERS TABLE: stores id username, password, and status
 -- ID is used to track game histories and win/loss statistics for leaderboards
@@ -45,4 +45,9 @@ CREATE TABLE turn_history (
   p2_play INTEGER,
   dealer_play INTEGER,
   forfeit INTEGER REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cards (
+  id SERIAL PRIMARY KEY NOT NULL,
+  img_address TEXT NOT NULL
 );
