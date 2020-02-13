@@ -18,23 +18,23 @@ $(function () {
     return div.innerHTML;
   };
 
-  // const cardVal = () => {
-  //   switch ($('.beenplayed').attr('id')) {
-  //     case 'ace': return 1;
-  //     case 'card2': return 2;
-  //     case 'card3': return 3;
-  //     case 'card4': return 4;
-  //     case 'card5': return 5;
-  //     case 'card6': return 6;
-  //     case 'card7': return 7;
-  //     case 'card8': return 8;
-  //     case 'card9': return 9;
-  //     case 'card10': return 10;
-  //     case 'jack': return 11;
-  //     case 'queen': return 12;
-  //     case 'king': return 13;
-  //   }
-  // }
+  const playerCardVal = () => {
+    switch ($('.beenplayed').attr('id')) {
+      case 'ace': return 1;
+      case 'card2': return 2;
+      case 'card3': return 3;
+      case 'card4': return 4;
+      case 'card5': return 5;
+      case 'card6': return 6;
+      case 'card7': return 7;
+      case 'card8': return 8;
+      case 'card9': return 9;
+      case 'card10': return 10;
+      case 'jack': return 11;
+      case 'queen': return 12;
+      case 'king': return 13;
+    }
+  }
 
   const cardVal = () => {
     switch ($('#dealer-play img').attr('id')) {
@@ -101,15 +101,18 @@ $(function () {
     //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
 
     $("#ready").click((element) => {
+      console.log("MOUTNING!!")
       element.preventDefault();
       if ($("#yourplay").html() != "") {
-        socket.emit('readyClicked', { name, val: cardVal() });
+        console.log("Someone sent data:", name, playerCardVal())
+        socket.emit('readyClicked', { name, val: playerCardVal()});
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
         $("#p1Right").append($("#p1Hand img:last-child"));
-        //changes the score value based on dealer card
-        $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
+        // $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
+        // changes the score value based on dealer card
+
         //checks if all dealer cards have been played yet. if not, then randomly draws another one. else, it updates score and exits
       //   socket.on("dealerPlayed", (dealerPlayed) => {
       //     if (dealerPlayed.length > 0) {
@@ -123,6 +126,35 @@ $(function () {
     });
 
   }
+
+  socket.on('results', (data) =>{
+    console.log(data)
+    if(data.name === name)
+    {
+      console.log(Number($("#p2Left p").text()) + data.val)
+      $("#p2Left p").text(Number($("#p2Left p").text()) + data.val);
+    } else if (data.name === 'draw'){
+    } else{
+      console.log(Number($("#p1Left p").text()) + data.val)
+      $("#p1Left p").text(Number($("#p1Left p").text()) + data.val);
+    }
+    $('#opponent-play').children().replaceWith('<div></div>');
+  })
+
+  socket.on("opponentReady", () => {
+    $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+  })
+
+  socket.on("goofComplete", (data) => {
+    if(data === name){
+      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>WINNER</p>`);
+    } else{
+      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
+    }
+
+
+  });
+
 
   boardListener();
 
@@ -245,7 +277,7 @@ $(function () {
   </div>
   <!-- middleHand will be populated by jquery inserts -->
   <div id="middleHand" class="gamespace">
-  <div id="opponent-play"></div>
+  <div id="opponent-play"><div></div></div>
   <div id="dealer-play"><div></div></div>
     <div id="yourplay"></div>
   </div>
@@ -306,19 +338,11 @@ $(function () {
     alert(data)
   })
 
-  //Listens for the user to hit the ready button
-  //Ready button should not be displayed until a game is loaded, will
-  //dicuss this during the group merge
-  //no longer works
-  // $("#ready").on('click', () => {
-  //   socket.emit('goofReady', name)
-  // });
-
   //Logs to the clients browsers console. Can be communicated
   //to the user in a better way, decide during group merge discussion
-  socket.on('ready', (data) => {
-    alert(data + " joined the room")
-  })
+  // socket.on('ready', (data) => {
+  //   alert(data + " joined the room")
+  // })
 
   //Recievs an object containing the socket.id of all users in
   //goofRoom
@@ -329,7 +353,7 @@ $(function () {
     //Only loads the board AND cards if there are two players in the room
     if (data.length > 1) {
       console.log("board should load")
-      socket.emit('playerReady')
+      socket.emit('playerJoinsRoom')
       $("#rightSide").empty();
       $("#rightSide").append(newBoard());
       boardListener();

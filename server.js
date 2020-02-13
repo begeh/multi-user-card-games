@@ -76,10 +76,36 @@ server.listen(PORT, () => {
 
 
 
+
+let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const dealerCard = () => {
+  let index = Math.floor(Math.random() * dealerPlayed.length);
+  let deal = dealerPlayed.splice(index, 1)[0];
+  return deal;
+};
+
+const turnEval = (p1, p2) => {
+  if (p1.val > p2.val) {
+    return p1.name;
+  } else if (p2.val > p1.val) {
+    return p2.name;
+  }
+  return 'draw';
+}
+
+
+let count = {};
+const score = {};
+
+
 const roomInfo = {};
 //Socket.io stuff goes here
 //Any console.logs here will log on the server side (on your computers terminal)
 io.on('connection', function (socket) {
+
+
+
+
   console.log("a user connected at", socket.id);
   socket.emit('news', { hello: 'world' });
 
@@ -96,7 +122,7 @@ io.on('connection', function (socket) {
     //Sends a message to the socket owner upon joining a room
     io.to(`${socket.id}`).emit("userJoin", "Welcome to goofRoom!")
     //Sends a message to everyone but the socket owner upon joining a room
-    socket.to('goofRoom').emit('ready', playerName);
+    // socket.to('goofRoom').emit('ready', playerName);
     //Emits an object containing the sockets in goofRoom
     io.in("goofRoom").emit("loadGoofBoard", io.sockets.adapter.rooms.goofRoom)
   }
@@ -134,40 +160,78 @@ io.on('connection', function (socket) {
         console.log(roomInfo)
       }
     }
-
   })
 
 
   let gameState;
 
-  socket.on("playerReady", () => {
+  socket.on("playerJoinsRoom", () => {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
-
-      let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-      const dealerCard = () => {
-        let index = Math.floor(Math.random() * dealerPlayed.length);
-        let deal = dealerPlayed.splice(index, 1);
-        return deal;
-      };
-
       deal = dealerCard()
       io.in("goofRoom").emit("dealerCard", deal)
-      socket.on("readyClicked", (data) => {
-
-        console.log(data)
-        // io.in("goofRoom").emit("dealerPlayed", dealerPlayed)
-      })
-
-
     }
   })
 
-//   const listener = () => {
-//     socket.on('readyClicked', data => {
-//     console.log(gameState);
-//   })
-// }
+
+  socket.on("readyClicked", (data) => {
+    count[data.name] = data.val;
+    console.log(count)
+
+
+    if (Object.keys(count).length === 1){
+      io.in("goofRoom").emit("opponentReady");
+    }
+    else if (Object.keys(count).length === 2) {
+      console.log("Two people readied up")
+
+      //Winner logic
+      let p1 = {
+        name: Object.keys(count)[0],
+        val: count[Object.keys(count)[0]]
+      }
+      let p2 = {
+        name: Object.keys(count)[1],
+        val: count[Object.keys(count)[1]]
+      }
+      console.log(p1, p2)
+      let winnerName = turnEval(p1, p2);
+      let winner = { name: winnerName, val: deal };
+      if (!score[winnerName]) {
+        score[winnerName] = 0;
+      }
+      score[winnerName] += winner.val
+      console.log(score)
+      count = {};
+      io.in("goofRoom").emit("results", winner)
+
+      if (dealerPlayed.length === 0) {
+        if (Object.keys(score).length === 1){
+          //One person won every game
+          io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+        } else {
+          if(score[Object.keys(score)[0]] > score[Object.keys(score)[1]] ){
+            io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+          } else {
+            io.in("goofRoom").emit("goofComplete", Object.keys(score)[1])
+          }
+        }
+
+
+      } else {
+      deal = dealerCard()
+      io.in("goofRoom").emit("dealerCard", deal)
+      }
+
+      // io.in("goofRoom").emit("scoreUpdate", count)
+
+
+
+
+    }
+
+  })
+
 
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists
