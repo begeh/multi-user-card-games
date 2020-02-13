@@ -63,9 +63,9 @@ $(function () {
   };
 
   const dealerCard = () => {
-      let index = Math.floor(Math.random() * dealerPlayed.length);
-      let deal = dealerPlayed.splice(index, 1);
-      return deal;
+    let index = Math.floor(Math.random() * dealerPlayed.length);
+    let deal = dealerPlayed.splice(index, 1);
+    return deal;
   };
 
   const boardListener = function () {
@@ -95,11 +95,13 @@ $(function () {
         $('.beenplayed').remove();
         $("#middleHand").append('<div id="yourplay">');
         $("#p1Right").append($("#p1Hand img:last-child"));
+        //changes the score value based on dealer card
         $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
-        if(dealerPlayed.length > 0){
+        //checks if all dealer cards have been played yet. if not, then randomly draws another one. else, it updates score and exits
+        if (dealerPlayed.length > 0) {
           let dealedCard = dealerCard();
           ($('#dealer-play').children()).replaceWith(`<img id=${dealedCard} src = ${playingCards[dealedCard]}>`);
-        } else{
+        } else {
           ($('#dealer-play').children()).replaceWith(`<div></div>`)
         }
       }
