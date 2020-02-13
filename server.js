@@ -11,9 +11,9 @@ const app = express();
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
 
-const {newGame} = require('./lib/goofspiel-scripts/newGame-function')
-const {getGameData} = require('./lib/goofspiel-scripts/getGameData-function')
-const {Turn} = require('./lib/goofspiel-scripts/game-logic-classes');
+const { newGame } = require('./lib/goofspiel-scripts/newGame-function')
+const { getGameData } = require('./lib/goofspiel-scripts/getGameData-function')
+const { Turn } = require('./lib/goofspiel-scripts/game-logic-classes');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
@@ -118,7 +118,7 @@ io.on('connection', function (socket) {
       console.log(roomInfo)
     } else {
       //If user is already in the room
-      if (true === io.sockets.adapter.rooms.goofRoom.sockets[`${socket.id}`]){
+      if (true === io.sockets.adapter.rooms.goofRoom.sockets[`${socket.id}`]) {
         console.log("User tried to join room they are already in")
         io.to(`${socket.id}`).emit("alreadyJoined", io.sockets.adapter.rooms)
       }
@@ -136,10 +136,10 @@ io.on('connection', function (socket) {
         // (async function() {
         //   const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
         //   console.log(Game, " RUN ONCE");
-          // const gameData = await getGameData(Game);
+        // const gameData = await getGameData(Game);
 
-          // console.log(gameData);
-          // const gameState = new Turn(gameData);
+        // console.log(gameData);
+        // const gameState = new Turn(gameData);
 
         // })();
       }
@@ -147,22 +147,31 @@ io.on('connection', function (socket) {
 
   })
 
+  let gameState;
+
   socket.on("playerReady", () => {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
-    (async function() {
-      const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
-      // console.log(Game);
-      const gameData = await getGameData(Game);
-      // console.log(gameData);
-      const gameState = new Turn(gameData[gameData.length - 1]);
-      console.log(gameState);
-      gameState.dealer.deal();
-      console.log(gameState.dealer.played);
-      io.in('goofRoom').emit('deal', gameState.dealer.played)
-    })();
+      (async function () {
+        const Game = await newGame(roomInfo['goof'].players[0], roomInfo['goof'].players[1]);
+        // console.log(Game);
+        const gameData = await getGameData(Game);
+        // console.log(gameData);
+        gameState = new Turn(gameData[gameData.length - 1]);
+        console.log(gameState);
+        gameState.dealer.deal();
+        console.log(gameState.dealer.played);
+        io.in('goofRoom').emit('deal', gameState.dealer.played)
+        listener();
+      })();
     }
   })
+
+  const listener = () => {
+    socket.on('readyClicked', data => {
+    console.log(gameState);
+  })
+}
 
   socket.on('goofReady', function (data) {
     //Checks if the goofRoom exists
