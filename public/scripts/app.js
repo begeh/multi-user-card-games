@@ -72,14 +72,17 @@ $(function () {
     13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
   };
 
-  const dealerCard = () => {
-    let index = Math.floor(Math.random() * dealerPlayed.length);
-    let deal = dealerPlayed.splice(index, 1);
-    return deal;
-  };
+  // const dealerCard = () => {
+  //   let index = Math.floor(Math.random() * dealerPlayed.length);
+  //   let deal = dealerPlayed.splice(index, 1);
+  //   return deal;
+  // };
 
   const boardListener = function () {
-    let deal = dealerCard();
+    //let deal = dealerCard();
+    socket.on("dealerCard", (data) => {
+      let deal = data;
+    })
     ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
     //when player clicks on a card, it is moved to the middle of game board for play
     $("#p2Hand .inplay").click((event) => {
@@ -239,7 +242,8 @@ $(function () {
   </div>
   <!-- middleHand will be populated by jquery inserts -->
   <div id="middleHand" class="gamespace">
-    <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
+  <div id="opponent-play"></div>
+  <div id="dealer-play"><div></div></div>
     <div id="yourplay"></div>
   </div>
   <div id="middleRight" class="gamespace">

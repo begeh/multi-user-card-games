@@ -74,6 +74,12 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
+const dealerCard = () => {
+  let index = Math.floor(Math.random() * dealerPlayed.length);
+  let deal = dealerPlayed.splice(index, 1);
+  return deal;
+};
+
 const roomInfo = {};
 //Socket.io stuff goes here
 //Any console.logs here will log on the server side (on your computers terminal)
@@ -135,12 +141,14 @@ io.on('connection', function (socket) {
 
   })
 
+
   let gameState;
 
   socket.on("playerReady", () => {
     roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
     if (roomInfo['goof'].playerReady === 2) {
-
+      deal = dealerCard()
+      io.in("goofRoom").emit("dealerCard", deal)
     }
   })
 
