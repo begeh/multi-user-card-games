@@ -140,9 +140,13 @@ $(function () {
     $('#opponent-play').children().replaceWith('<div></div>');
   })
 
-  socket.on("opponentReady", () => {
-    $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+  socket.on("opponentReady", (data) => {
+    console.log(data, "readied")
+    if (name !== data) {
+      $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+    }
   })
+
 
   socket.on("goofComplete", (data) => {
     if (data === null) {
@@ -196,7 +200,7 @@ $(function () {
       </div>
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
-      <div id="opponent-play"></div>
+      <div id="opponent-play"><div></div></div>
       <div id="dealer-play"><div></div></div>
         <div id="yourplay"></div>
       </div>

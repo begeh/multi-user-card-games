@@ -178,11 +178,13 @@ io.on('connection', function (socket) {
     count[data.name] = data.val;
     console.log(count)
 
-
     if (Object.keys(count).length === 1) {
-      io.in("goofRoom").emit("opponentReady");
+      console.log("opponenetReady emitted")
+      io.in("goofRoom").emit("opponentReady", data.name);
     }
-    else if (Object.keys(count).length === 2) {
+
+
+    if (Object.keys(count).length === 2) {
       console.log("Two people readied up")
 
       //Winner logic
