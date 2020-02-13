@@ -77,6 +77,7 @@ $(function () {
     $("#ready").click((element) => {
       element.preventDefault();
       if ($("#yourplay").html() != "") {
+        socket.emit('readyClicked', {name, val: cardVal()});
         $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
         $("#p2Right").append($(".beenplayed img"));
         $('.beenplayed').remove();
