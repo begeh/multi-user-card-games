@@ -2,6 +2,13 @@
 
 $(function () {
 
+  let score1 = 0;
+  let score2= 0;
+  let played1 = 0;
+  let played2 = 0;
+  let dealer_play = 0;
+
+
   const escape = function (str) {
     let div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
