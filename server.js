@@ -67,6 +67,12 @@ app.use("/main", mainRoutes(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
+  if (req.session.user_id) {
+    const templateVars = {};
+    templateVars.username = req.body.username;
+    req.session.user_id = req.body.username;
+    res.render('main', templateVars);
+  }
   res.render("index");
 });
 
@@ -77,7 +83,8 @@ server.listen(PORT, () => {
 
 
 
-let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+let dealerPlayed = [1]
+//  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const dealerCard = () => {
   let index = Math.floor(Math.random() * dealerPlayed.length);
   let deal = dealerPlayed.splice(index, 1)[0];
@@ -227,17 +234,26 @@ io.on('connection', function (socket) {
           }
         }
 
+        setTimeout(function () {
+          console.log("timeout fired")
+          app.get("/", (req, res) => {
+            // if (req.session.user_id) {
+            //   const templateVars = {};
+            //   templateVars.username = req.body.username;
+            //   req.session.user_id = req.body.username;
+            //   res.render('main', templateVars);
+            // } else {
+            //   console.log("app.get fired but nothing rendered")
+            // }
+            console.log("get fired")
+            res.redirect('back');
+            res.render('main');
+          }) }, 3000);
 
       } else {
         deal = dealerCard()
         io.in("goofRoom").emit("dealerCard", deal)
       }
-
-      // io.in("goofRoom").emit("scoreUpdate", count)
-
-
-
-
     }
 
   })

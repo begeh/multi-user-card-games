@@ -136,8 +136,8 @@ $(function () {
         $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
-  });
 
+  });
 
   boardListener();
 
