@@ -125,72 +125,105 @@ io.on('connection', function (socket) {
   //Room Stuff//
 
   //Joins the socket to the room goofRoom when called
-  const joinGoofRoom = function (playerName) {
+  const joinGoofRoom = function (nameAndRoom) {
     //If room does not exist, it will be created before joining the socket
-    socket.join('goofRoom')
-    console.log(`${playerName} with id ${socket.id} joined goofRoom`)
+    socket.join(`${nameAndRoom.room}`)
+    console.log(`${nameAndRoom.name} with id ${socket.id} joined goofRoom`)
     //Sends a message to the socket owner upon joining a room
-    io.to(`${socket.id}`).emit("userJoin", "Welcome to goofRoom!")
-    //Sends a message to everyone but the socket owner upon joining a room
-    // socket.to('goofRoom').emit('ready', playerName);
+    io.to(`${socket.id}`).emit("userJoin", `Welcome to ${nameAndRoom.room}!`)
     //Emits an object containing the sockets in goofRoom
-    io.in("goofRoom").emit("loadGoofBoard", io.sockets.adapter.rooms.goofRoom)
+    const currentRoom = io.sockets.adapter.rooms[`${nameAndRoom.room}`]
+    io.in(`${nameAndRoom.room}`).emit("loadGoofBoard", { currentRoom, roomName: nameAndRoom.room })
   }
 
-  //Can use a class (RoomMaker) to keep track on the server side of which users are in a room
-  //When both users are in a room and ready to play, create a new RoomMaker object
-  //It will contain an id of the room. the id of the game and each players name
-  //When somone clicks to join a goofspiel room:
-
-
   //Listens for the goof-join event sent from app.js
-  socket.on('goof-join', function (playerName) {
+  socket.on('goof-join', function (nameAndRoom) {
     console.log(socket.id)
     //If room does not exist:
-    if (!io.sockets.adapter.rooms.goofRoom) {
-      joinGoofRoom(playerName)
-      roomInfo['goof'] = {
-        players: [playerName],
+
+
+
+
+    if (nameAndRoom.room) {
+
+      joinGoofRoom(nameAndRoom)
+      roomInfo[`${nameAndRoom.room}`] = {
+        players: [nameAndRoom.name],
         id: [socket.id]
-      };
-      console.log(roomInfo)
-    } else {
-      //If user is already in the room
-      if (true === io.sockets.adapter.rooms.goofRoom.sockets[`${socket.id}`]) {
-        console.log("User tried to join room they are already in")
-        io.to(`${socket.id}`).emit("alreadyJoined", io.sockets.adapter.rooms)
       }
-      else if (io.sockets.adapter.rooms.goofRoom.length >= 3) {
-        console.log(socket.id, " tried to join a full room")
-        socket.emit('roomFull')
+
+
+    } else {
+
+      const allRooms = Object.keys(roomInfo);
+
+
+      const roomNo = allRooms[Math.round(Math.random() * (allRooms.length - 1))];
+      nameAndRoom.room = roomNo;
+
+      if (allRooms.length === 0 ) {
+        socket.emit("noExistingGoofRooms")
+      } else if (roomInfo[nameAndRoom.room].players.length >= 2) {
+        socket.emit("roomFull");
       } else {
-        joinGoofRoom(playerName)
-        roomInfo['goof'].players.push(playerName);
-        roomInfo['goof'].id.push(socket.id);
-        console.log(roomInfo)
+        joinGoofRoom(nameAndRoom)
+        roomInfo[nameAndRoom.room].players.push(nameAndRoom.name);
+        roomInfo[nameAndRoom.room].id.push(socket.id);
+        console.log(allRooms)
       }
     }
+
+
+    // if (!io.sockets.adapter.rooms[nameAndRoom.room]) {
+
+    //   joinGoofRoom(nameAndRoom)
+    //   };
+    //   console.log(roomInfo)
+
+    // } else {
+
+    //If user is already in the room
+    // if (true === io.sockets.adapter.rooms[nameAndRoom.room].sockets[`${socket.id}`]) {
+    //   console.log("User tried to join room they are already in")
+    //   io.to(`${socket.id}`).emit("alreadyJoined", io.sockets.adapter.rooms)
+    // }
+    //  if (io.sockets.adapter.rooms.goofRoom.length >= 3) {
+    //   console.log(socket.id, " tried to join a full room")
+    //   socket.emit('roomFull')
+    // } else {
+    //   joinGoofRoom(nameAndRoom)
+    //   roomInfo['goof'].players.push(nameAndRoom.name);
+    //   roomInfo['goof'].id.push(socket.id);
+    //   console.log(roomInfo)
+
+    // }
+
+
   })
 
 
   let gameState;
 
-  socket.on("playerJoinsRoom", () => {
-    roomInfo['goof'].playerReady ? roomInfo['goof'].playerReady++ : roomInfo['goof'].playerReady = 1;
-    if (roomInfo['goof'].playerReady === 2) {
+  socket.on("playerJoinsRoom", (roomName) => {
+    console.log(roomName)
+    roomInfo[`${roomName}`].playerReady ? roomInfo[`${roomName}`].playerReady++ : roomInfo[`${roomName}`].playerReady = 1;
+    if (roomInfo[`${roomName}`].playerReady === 2) {
       deal = dealerCard()
-      io.in("goofRoom").emit("dealerCard", deal)
+      io.in(`${roomName}`).emit("dealerCard", deal)
     }
   })
 
 
   socket.on("readyClicked", (data) => {
+    console.log(data)
     count[data.name] = data.val;
+    let roomName = data.thisRoom;
+    console.log(roomName)
     console.log(count)
 
     if (Object.keys(count).length === 1) {
       console.log("opponenetReady emitted")
-      io.in("goofRoom").emit("opponentReady", data.name);
+      io.in(`${roomName}`).emit("opponentReady", data.name);
     }
 
 
@@ -215,24 +248,24 @@ io.on('connection', function (socket) {
       score[winnerName] += winner.val
       console.log(score)
       count = {};
-      io.in("goofRoom").emit("results", winner)
+      io.in(`${roomName}`).emit("results", winner)
 
       //On game end
       if (dealerPlayed.length === 0) {
         if (Object.keys(score).length === 1 && score.draw) {
-          io.in("goofRoom").emit("goofComplete", null)
+          io.in(`${roomName}`).emit("goofComplete", null)
         }
         //If one person won every round
         else if (Object.keys(score).length === 1) {
-          io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+          io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[0])
           //If both players won a round
         } else {
           if (score[Object.keys(score)[0]] > score[Object.keys(score)[1]]) {
-            io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+            io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[0])
           } else if (score[Object.keys(score)[0]] < score[Object.keys(score)[1]]) {
-            io.in("goofRoom").emit("goofComplete", Object.keys(score)[1])
+            io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[1])
           } else {
-            io.in("goofRoom").emit("goofComplete", null)
+            io.in(`${roomName}`).emit("goofComplete", null)
 
           }
         }
@@ -241,7 +274,7 @@ io.on('connection', function (socket) {
 
       } else {
         deal = dealerCard()
-        io.in("goofRoom").emit("dealerCard", deal)
+        io.in(`${roomName}`).emit("dealerCard", deal)
       }
     }
 

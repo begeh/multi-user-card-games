@@ -71,7 +71,7 @@ $(function () {
   };
 
   const boardListener = function () {
-    //let deal = dealerCard();
+    let thisRoom = $(`.roomName`).text()
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
@@ -93,10 +93,12 @@ $(function () {
     //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
     $("#ready").click((element) => {
       console.log("MOUTNING!!")
+
       element.preventDefault();
       if ($("#yourplay").html() != "") {
+
         console.log("Someone sent data:", name, playerCardVal())
-        socket.emit('readyClicked', { name, val: playerCardVal() });
+        socket.emit('readyClicked', { name, val: playerCardVal(), thisRoom });
       }
     });
   }
@@ -136,7 +138,7 @@ $(function () {
         $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
-    setTimeout(()=> {
+    setTimeout(() => {
 
       location.reload()
 
@@ -145,8 +147,9 @@ $(function () {
 
   boardListener();
 
-  const newBoard = () =>
-    `<div id="display">
+  const newBoard = (roomName) =>
+    `<h3 class='roomName'>${roomName}</h3>
+    <div id="display">
       <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
       <div id="p1Left" class="gamespace">Opponent's Points
         <p class="points">0</p>
@@ -305,10 +308,26 @@ $(function () {
   $("#goof").on('click', () => {
     //Prompts the user to confirm room join
     if (confirm("Join Goofspiel room?")) {
-      socket.emit('goof-join', name)
+      socket.emit('goof-join', { name })
       console.log("Attemping goofRoom join")
     }
   });
+
+  $("#goofMake").on('click', () => {
+
+    const goofRoom = prompt("What would you like to call you room?")
+    if (goofRoom) {
+      socket.emit('goof-join', { name, room: goofRoom })
+      console.log("Attemping goofRoom creation")
+    }
+  }
+  );
+
+  socket.on("noExistingGoofRooms", () => {
+    alert("No Goofspiel rooms have been made!")
+  })
+
+
   //Aelrts the client if they are already in the room they are trying to join
   socket.on("alreadyJoined", (data) => {
     console.log(data)
@@ -334,15 +353,16 @@ $(function () {
   //Recievs an object containing the socket.id of all users in
   //goofRoom
   socket.on("loadGoofBoard", (data) => {
-    console.log(data.length)
-    console.log(data.sockets)
-
+    const { currentRoom, roomName } = data;
+    console.table(data)
+    console.log(currentRoom.length)
+    console.log(currentRoom.sockets)
     //Only loads the board AND cards if there are two players in the room
-    if (data.length > 1) {
+    if (currentRoom.length > 1) {
       console.log("board should load")
-      socket.emit('playerJoinsRoom')
+      socket.emit('playerJoinsRoom', roomName)
       $("#rightSide").empty();
-      $("#rightSide").append(newBoard());
+      $("#rightSide").append(newBoard(roomName));
       boardListener();
       //Loads the frame of the play area
     } else {
