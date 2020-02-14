@@ -5,12 +5,6 @@ $(function () {
   //This is the users name, we can pass this data through socket.io
   const name = $('#user-name u strong').text();
   const socket = io.connect('http://localhost:8080');
-  let score1 = 0;
-  let score2 = 0;
-  let played1 = 0;
-  let played2 = 0;
-  let dealer_play = 0;
-
 
   const escape = function (str) {
     let div = document.createElement('div');
@@ -18,6 +12,7 @@ $(function () {
     return div.innerHTML;
   };
 
+  //function checks for numerical value equivalent to the player's card value
   const playerCardVal = () => {
     switch ($('.beenplayed').attr('id')) {
       case 'ace': return 1;
@@ -36,6 +31,7 @@ $(function () {
     }
   }
 
+  //function checks for numerical value equivalent to the dealer's card value
   const cardVal = () => {
     switch ($('#dealer-play img').attr('id')) {
       case '1': return 1;
@@ -54,6 +50,7 @@ $(function () {
     }
   }
 
+  //object containing values for dealer's card (used to render dealer card based on its index)
   const playingCards = {
     1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
     2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
@@ -75,17 +72,20 @@ $(function () {
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
-      $("#p2Hand .inplay").click((event) => {
+      $("#p2Hand .inplay img").click((event) => {
         event.preventDefault();
-        if ($("#yourplay").html() == "") {
-          $("#middleHand #yourplay").replaceWith($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
-        }
-        else {
-          $("#p2Hand").append($(".beenplayed"));
-          $('.beenplayed').removeClass('beenplayed');
-          $("#middleHand").append($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
+        //*** used this if statement to only target img in p2Hand. for some reason, click function persisted when card when to discard pile for some reason. will have to look for better fix ***
+        if ($(event.target).parent().attr('id') !== 'p2Right') {
+          if ($("#yourplay").html() == "") {
+            $("#middleHand #yourplay").replaceWith($(event.target).parent());
+            ($(event.target).parent()).addClass('beenplayed');
+          }
+          else {
+            $("#p2Hand").append($(".beenplayed"));
+            $('.beenplayed').removeClass('beenplayed');
+            $("#middleHand").append($(event.target).parent());
+            ($(event.target).parent()).addClass('beenplayed');
+          }
         }
       })
     });
@@ -179,7 +179,7 @@ $(function () {
       </div>
 
       <div id="middleLeft" class="gamespace">
-        <button type="button" class="btn btn-danger">Forfeit</button>
+        <button id= "forfeit" type="button" class="btn btn-danger">Forfeit</button>
       </div>
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
@@ -294,11 +294,11 @@ $(function () {
 
 
   //when forfeit button is clicked, board reinitializes and inactivates
-  $("#forfeit").click((event) => {
-    event.preventDefault();
-    $("#display").replaceWith(newBoard());
-    $("#rightSide #display").css('opacity', '0.3');
-  });
+  // $("#forfeit").click((event) => {
+  //   event.preventDefault();
+  //   $("#display").replaceWith(newBoard());
+  //   $("#rightSide #display").css('opacity', '0.3');
+  // });
 
   //Console.logs on this page appear in the repsective clients console (chrome)
   //Some of those Will most need to be changed to alerts, popups, whatever

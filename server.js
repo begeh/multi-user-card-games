@@ -103,10 +103,6 @@ const turnEval = (p1, p2) => {
 
 let count = {};
 const score = {};
-// function reloader() {
-//   location.reload();
-// }
-
 
 const roomInfo = {};
 //Socket.io stuff goes here
@@ -261,16 +257,17 @@ io.on('connection', function (socket) {
           //If both players won a round
         } else {
           if (score[Object.keys(score)[0]] > score[Object.keys(score)[1]]) {
+            db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[0]}');`)
             io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[0])
           } else if (score[Object.keys(score)[0]] < score[Object.keys(score)[1]]) {
+            db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[1]}');`);
             io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[1])
           } else {
-            io.in(`${roomName}`).emit("goofComplete", null)
-
+            io.in(`${roomName}`).emit("goofComplete", null);
           }
         }
         //Resets the dealer deck
-        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
       } else {
         deal = dealerCard()
