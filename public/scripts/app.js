@@ -74,6 +74,7 @@ $(function () {
       //when player clicks on a card, it is moved to the middle of game board for play
       $("#p2Hand .inplay img").click((event) => {
         event.preventDefault();
+        //*** used this if statement to only target img in p2Hand. for some reason, click function persisted when card when to discard pile for some reason. will have to look for better fix ***
         if ($(event.target).parent().attr('id') !== 'p2Right') {
           if ($("#yourplay").html() == "") {
             $("#middleHand #yourplay").replaceWith($(event.target).parent());
