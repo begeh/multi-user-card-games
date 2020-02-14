@@ -3,7 +3,9 @@ const router = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
+    if(req.session.user_id){
     res.render("main");
+    }
   });
 
   router.post('/', (req, res) => {

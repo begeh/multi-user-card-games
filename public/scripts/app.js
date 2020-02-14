@@ -48,8 +48,6 @@ $(function () {
     }
   }
 
-  // let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-
   const playingCards = {
     1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
     2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
@@ -86,32 +84,14 @@ $(function () {
     });
 
     //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
-
     $("#ready").click((element) => {
       console.log("MOUTNING!!")
       element.preventDefault();
       if ($("#yourplay").html() != "") {
         console.log("Someone sent data:", name, playerCardVal())
         socket.emit('readyClicked', { name, val: playerCardVal() });
-        $("#p2Right").append($(".beenplayed img"));
-        $('.beenplayed').remove();
-        $("#middleHand").append('<div id="yourplay">');
-        $("#p1Right").append($("#p1Hand img:last-child"));
-        // $("#p2Left p").text(Number($("#p2Left p").text()) + cardVal());
-        // changes the score value based on dealer card
-
-        //checks if all dealer cards have been played yet. if not, then randomly draws another one. else, it updates score and exits
-        //   socket.on("dealerPlayed", (dealerPlayed) => {
-        //     if (dealerPlayed.length > 0) {
-        //       let dealedCard = dealerCard();
-        //       ($('#dealer-play').children()).replaceWith(`<img id=${dealedCard} src = ${playingCards[dealedCard]}>`);
-        //     } else {
-        //       ($('#dealer-play').children()).replaceWith(`<div></div>`)
-        //     }
-        //   });
       }
     });
-
   }
 
   socket.on('results', (data) => {
@@ -124,11 +104,19 @@ $(function () {
       console.log(Number($("#p1Left p").text()) + data.val)
       $("#p1Left p").text(Number($("#p1Left p").text()) + data.val);
     }
+    //Moves cards from each play area to their respective plyed cards area
+    $("#p2Right").append($(".beenplayed img"));
+    $('.beenplayed').remove();
+    $("#middleHand").append('<div id="yourplay">');
+    $("#p1Right").append($("#p1Hand img:last-child"));
     $('#opponent-play').children().replaceWith('<div></div>');
   })
 
-  socket.on("opponentReady", () => {
-    $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+  socket.on("opponentReady", (data) => {
+    console.log(data, "readied")
+    if (name !== data) {
+      $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+    }
   })
 
   socket.on("goofComplete", (data) => {
@@ -141,10 +129,12 @@ $(function () {
         $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
+    setTimeout(()=> {
 
+      location.reload()
 
+    }, 3000)
   });
-
 
   boardListener();
 
@@ -183,7 +173,7 @@ $(function () {
       </div>
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">
-      <div id="opponent-play"></div>
+      <div id="opponent-play"><div></div></div>
       <div id="dealer-play"><div></div></div>
         <div id="yourplay"></div>
       </div>

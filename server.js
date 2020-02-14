@@ -10,6 +10,7 @@ const sass = require("node-sass-middleware");
 const app = express();
 const morgan = require('morgan');
 const cookieSession = require('cookie-session');
+const request = require('request');
 
 const { newGame } = require('./lib/goofspiel-scripts/newGame-function')
 const { getGameData } = require('./lib/goofspiel-scripts/getGameData-function')
@@ -67,6 +68,12 @@ app.use("/main", mainRoutes(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
+  if (req.session.user_id) {
+    const templateVars = {};
+    templateVars.username = req.body.username;
+    req.session.user_id = req.body.username;
+    res.render('main', templateVars);
+  }
   res.render("index");
 });
 
@@ -96,6 +103,9 @@ const turnEval = (p1, p2) => {
 
 let count = {};
 const score = {};
+// function reloader() {
+//   location.reload();
+// }
 
 
 const roomInfo = {};
@@ -178,11 +188,13 @@ io.on('connection', function (socket) {
     count[data.name] = data.val;
     console.log(count)
 
-
     if (Object.keys(count).length === 1) {
-      io.in("goofRoom").emit("opponentReady");
+      console.log("opponenetReady emitted")
+      io.in("goofRoom").emit("opponentReady", data.name);
     }
-    else if (Object.keys(count).length === 2) {
+
+
+    if (Object.keys(count).length === 2) {
       console.log("Two people readied up")
 
       //Winner logic
@@ -224,18 +236,13 @@ io.on('connection', function (socket) {
 
           }
         }
-
+        //Resets the dealer deck
+        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
       } else {
         deal = dealerCard()
         io.in("goofRoom").emit("dealerCard", deal)
       }
-
-      // io.in("goofRoom").emit("scoreUpdate", count)
-
-
-
-
     }
 
   })
