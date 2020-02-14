@@ -84,7 +84,8 @@ server.listen(PORT, () => {
 
 
 
-let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+let dealerPlayed = [1, 2, 3]
+// 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const dealerCard = () => {
   let index = Math.floor(Math.random() * dealerPlayed.length);
   let deal = dealerPlayed.splice(index, 1)[0];
@@ -263,6 +264,7 @@ io.on('connection', function (socket) {
             db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[1]}');`);
             io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[1])
           } else {
+            db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${p1.name}','${p2.name}', 'DRAW');`);
             io.in(`${roomName}`).emit("goofComplete", null);
           }
         }
