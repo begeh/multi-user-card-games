@@ -72,17 +72,19 @@ $(function () {
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
-      $("#p2Hand .inplay").click((event) => {
+      $("#p2Hand .inplay img").click((event) => {
         event.preventDefault();
-        if ($("#yourplay").html() == "") {
-          $("#middleHand #yourplay").replaceWith($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
-        }
-        else {
-          $("#p2Hand").append($(".beenplayed"));
-          $('.beenplayed').removeClass('beenplayed');
-          $("#middleHand").append($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
+        if ($(event.target).parent().attr('id') !== 'p2Right') {
+          if ($("#yourplay").html() == "") {
+            $("#middleHand #yourplay").replaceWith($(event.target).parent());
+            ($(event.target).parent()).addClass('beenplayed');
+          }
+          else {
+            $("#p2Hand").append($(".beenplayed"));
+            $('.beenplayed').removeClass('beenplayed');
+            $("#middleHand").append($(event.target).parent());
+            ($(event.target).parent()).addClass('beenplayed');
+          }
         }
       })
     });
