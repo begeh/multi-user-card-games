@@ -103,10 +103,6 @@ const turnEval = (p1, p2) => {
 
 let count = {};
 const score = {};
-// function reloader() {
-//   location.reload();
-// }
-
 
 const roomInfo = {};
 //Socket.io stuff goes here

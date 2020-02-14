@@ -12,6 +12,7 @@ $(function () {
     return div.innerHTML;
   };
 
+  //function checks for numerical value equivalent to the player's card value
   const playerCardVal = () => {
     switch ($('.beenplayed').attr('id')) {
       case 'ace': return 1;
@@ -30,6 +31,7 @@ $(function () {
     }
   }
 
+  //function checks for numerical value equivalent to the dealer's card value
   const cardVal = () => {
     switch ($('#dealer-play img').attr('id')) {
       case '1': return 1;
@@ -48,6 +50,7 @@ $(function () {
     }
   }
 
+  //object containing values for dealer's card (used to render dealer card based on its index)
   const playingCards = {
     1: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/14H.png?raw=true',
     2: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/2H.png?raw=true',
@@ -284,11 +287,11 @@ $(function () {
 
 
   //when forfeit button is clicked, board reinitializes and inactivates
-  $("#forfeit").click((event) => {
-    event.preventDefault();
-    $("#display").replaceWith(newBoard());
-    $("#rightSide #display").css('opacity', '0.3');
-  });
+  // $("#forfeit").click((event) => {
+  //   event.preventDefault();
+  //   $("#display").replaceWith(newBoard());
+  //   $("#rightSide #display").css('opacity', '0.3');
+  // });
 
   //Console.logs on this page appear in the repsective clients console (chrome)
   //Some of those Will most need to be changed to alerts, popups, whatever
