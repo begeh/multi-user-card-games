@@ -1,10 +1,10 @@
-body #not_header {
+body .not_header {
   display: grid;
   grid-template-columns: 30% 10% 60%;
   padding-top: 16px;
   text-align: center;
 
-  #leftSide {
+  .leftSide {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -13,7 +13,7 @@ body #not_header {
     width: auto;
   }
 
-  #middle {
+  .middle {
     border-style: inset;
     background-color: black;
     max-width: 2vw;
@@ -27,32 +27,32 @@ body #not_header {
   }
 
   //css forfeit button container
-  #middleLeft {
+  .middleLeft {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   //css for ready button container
-  #middleRight {
+  .middleRight {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  #rightSide {
+  .rightSide {
     padding: 1em;
     background-color: inherit;
   }
 
   //css for 'P1 Played Cards' section of main page
-  #p1Right {
+  .p1Right {
     display: grid;
     grid-template-columns: repeat(7, 10%);
   }
 
   //css for images in 'P1 Played Cards' section of main page
-  #p1Right img {
+  .p1Right img {
     display: unset;
     max-height: 90px;
     width: auto;
@@ -60,20 +60,20 @@ body #not_header {
   }
 
   //css for 'P2 Played Cards' section of main page
-  #p2Right {
+  .p2Right {
     display: grid;
     grid-template-columns: repeat(7, 10%);
   }
 
   //css for images in 'P2 Played Cards' section of main page
-  #p2Right img {
+  .p2Right img {
     display: unset;
     max-height: 90px;
     width: auto;
     flex-wrap: inherit;
   }
 
-  #p1Left .points {
+  .p1Left .points {
     color: yellow;
     font-size: 30px;
     height: 100%;
@@ -81,7 +81,7 @@ body #not_header {
     padding-bottom: 5rem;
   }
 
-  #p2Left .points {
+  .p2Left .points {
     color: yellow;
     font-size: 30px;
     height: 100%;
@@ -89,7 +89,7 @@ body #not_header {
     padding-bottom: 5rem;
   }
 
-  #rightSide #display {
+  .rightSide .display {
     background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
     /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
     display: grid;
@@ -100,47 +100,47 @@ body #not_header {
     border-style: inset;
   }
 
-  #rightSide #display .gamespace {
+  .rightSide .display .gamespace {
     border-style: outset;
     border-color: darkslategrey;
   }
 
-  #rightSide #display #p1Hand {
+  .rightSide .display .p1Hand {
     display: grid;
     grid-template-columns: repeat(7, 13%);
   }
 
-  #rightSide #display #p1Hand img {
+  .rightSide .display .p1Hand img {
     display: unset;
     max-height: 100px;
     width: auto;
   }
 
-  #rightSide #display #p2Hand {
+  .rightSide .display .p2Hand {
     display: grid;
     grid-template-columns: repeat(7, 13%);
   }
 
-  #rightSide #display #p2Hand img {
+  .rightSide .display .p2Hand img {
     display: unset;
     max-height: 100px;
     width: auto;
     flex-wrap: inherit;
   }
 
-  #rightSide #display #p2Hand img:hover {
+  .rightSide .display .p2Hand img:hover {
     border-style: solid;
     border-color: yellow;
   }
 
-  #rightSide #display #middleHand {
+  .rightSide .display .middleHand {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
   }
 
-  #rightSide #display #middleHand img {
+  .rightSide .display .middleHand img {
     max-height: 100px;
     max-width: auto;
   }
@@ -149,7 +149,7 @@ body #not_header {
 
 body {
   //css for username of logged in user in nav bar
-  #user-name {
+  .user-name {
     font-size: 16px;
     color: white;
     margin-bottom: 0;

@@ -85,10 +85,10 @@ server.listen(PORT, () => {
 
 
 let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-const dealerCard = () => {
+const dealerCard = (dealerArray) => {
   let index = Math.floor(Math.random() * dealerPlayed.length);
-  let deal = dealerPlayed.splice(index, 1)[0];
-  return deal;
+  let deal = dealerArray.splice(index, 1)[0];
+  return { deal, dealerArray };
 };
 
 const turnEval = (p1, p2) => {
@@ -161,7 +161,7 @@ io.on('connection', function (socket) {
       const roomNo = allRooms[Math.round(Math.random() * (allRooms.length - 1))];
       nameAndRoom.room = roomNo;
 
-      if (allRooms.length === 0 ) {
+      if (allRooms.length === 0) {
         socket.emit("noExistingGoofRooms")
       } else if (roomInfo[nameAndRoom.room].players.length >= 2) {
         socket.emit("roomFull");
@@ -197,7 +197,7 @@ io.on('connection', function (socket) {
     //   console.log(roomInfo)
 
     // }
-
+    console.log("This is the room info ", roomInfo)
 
   })
 
@@ -208,8 +208,14 @@ io.on('connection', function (socket) {
     console.log(roomName)
     roomInfo[`${roomName}`].playerReady ? roomInfo[`${roomName}`].playerReady++ : roomInfo[`${roomName}`].playerReady = 1;
     if (roomInfo[`${roomName}`].playerReady === 2) {
-      deal = dealerCard()
+      roomInfo[roomName].deck = dealerPlayed;
+      let roomDeck = roomInfo[roomName].deck
+      let { deal, dealerArray } = dealerCard(roomDeck)
       io.in(`${roomName}`).emit("dealerCard", deal)
+      roomInfo[roomName].deck = dealerArray
+      roomInfo[roomName].dealt = deal
+      console.log(roomInfo[roomName])
+
     }
   })
 
@@ -241,17 +247,18 @@ io.on('connection', function (socket) {
       }
       console.log(p1, p2)
       let winnerName = turnEval(p1, p2);
-      let winner = { name: winnerName, val: deal };
+      console.log(roomInfo[roomName].dealt)
+      let winner = { name: winnerName, val: roomInfo[roomName].dealt };
       if (!score[winnerName]) {
         score[winnerName] = 0;
       }
       score[winnerName] += winner.val
       console.log(score)
       count = {};
-      io.in(`${roomName}`).emit("results", winner)
+      io.in(`${roomName}`).emit("results", {winner, roomName})
 
       //On game end
-      if (dealerPlayed.length === 0) {
+      if (roomInfo[roomName].deck === 0) {
         if (Object.keys(score).length === 1 && score.draw) {
           io.in(`${roomName}`).emit("goofComplete", null)
         }
@@ -273,8 +280,10 @@ io.on('connection', function (socket) {
         dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
       } else {
-        deal = dealerCard()
+        let { deal, dealerArray } = dealerCard(roomInfo[roomName].deck)
         io.in(`${roomName}`).emit("dealerCard", deal)
+        roomInfo[roomName].deck = dealerArray
+        roomInfo[roomName].dealt = deal
       }
     }
 

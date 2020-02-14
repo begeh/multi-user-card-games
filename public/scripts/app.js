@@ -19,7 +19,7 @@ $(function () {
   };
 
   const playerCardVal = () => {
-    switch ($('.beenplayed').attr('id')) {
+    switch ($(` #${roomName} .beenplayed`).attr('class')) {
       case 'ace': return 1;
       case 'card2': return 2;
       case 'card3': return 3;
@@ -37,7 +37,7 @@ $(function () {
   }
 
   const cardVal = () => {
-    switch ($('#dealer-play img').attr('id')) {
+    switch ($(`#${roomName} .dealer-play img`).attr('class')) {
       case '1': return 1;
       case '2': return 2;
       case '3': return 3;
@@ -70,72 +70,83 @@ $(function () {
     13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
   };
 
-  const boardListener = function () {
-    let thisRoom = $(`.roomName`).text()
+  const boardListener = function (roomName) {
+    // let roomName = $(`.roomName`).text()
     socket.on("dealerCard", (deal) => {
-      ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
+      ($(`#${roomName} .dealer-play`).children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
-      $("#p2Hand .inplay").click((event) => {
+      $(`#${roomName} .p2Hand .inplay`).click((event) => {
         event.preventDefault();
-        if ($("#yourplay").html() == "") {
-          $("#middleHand #yourplay").replaceWith($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
+        if ($(`#${roomName} .yourplay`).html() == ``) {
+          $(`#${roomName} .middleHand .yourplay`).replaceWith($(event.target).parent());
+          ($(event.target).parent()).addClass(`beenplayed`);
         }
         else {
-          $("#p2Hand").append($(".beenplayed"));
-          $('.beenplayed').removeClass('beenplayed');
-          $("#middleHand").append($(event.target).parent());
-          ($(event.target).parent()).addClass('beenplayed');
+          $(`#${roomName} .p2Hand`).append($(".beenplayed"));
+          $(`#${roomName} .beenplayed`).removeClass(`beenplayed`);
+          $(`#${roomName} .middleHand`).append($(event.target).parent());
+          ($(event.target).parent()).addClass(`beenplayed`);
         }
       })
     });
 
     //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
-    $("#ready").click((element) => {
+
+    $(`#${roomName} .ready`).click((element) => {
       console.log("MOUTNING!!")
 
       element.preventDefault();
-      if ($("#yourplay").html() != "") {
+      if ($(`#${roomName} .yourplay`).html() != "") {
 
         console.log("Someone sent data:", name, playerCardVal())
         socket.emit('readyClicked', { name, val: playerCardVal(), thisRoom });
       }
     });
+
+
+    //when forfeit button is clicked, board reinitializes and inactivates
+    $(` #${roomName} .forfeit`).click((event) => {
+      event.preventDefault();
+      $(`#${roomName} .display`).replaceWith(newBoard());
+      $(`.rightSide .display`).css('opacity', '0.3');
+    });
+
   }
 
-  socket.on('results', (data) => {
-    console.log(data)
+  socket.on('results', (results) => {
+    const { data, roomName } = results
+    console.log(results)
     if (data.name === name) {
-      console.log(Number($("#p2Left p").text()) + data.val)
-      $("#p2Left p").text(Number($("#p2Left p").text()) + data.val);
+      console.log(Number($(`#${roomName} .p2Left p`).text()) + data.val)
+      $(`#${roomName}.p2Left p`).text(Number($(`#${roomName} .p2Left p`).text()) + data.val);
     } else if (data.name === 'draw') {
     } else {
-      console.log(Number($("#p1Left p").text()) + data.val)
-      $("#p1Left p").text(Number($("#p1Left p").text()) + data.val);
+      console.log(Number($(`#${roomName} .p1Left p`).text()) + data.val)
+      $(`#${roomName} .p1Left p`).text(Number($(`#${roomName} .p1Left p`).text()) + data.val);
     }
     //Moves cards from each play area to their respective plyed cards area
-    $("#p2Right").append($(".beenplayed img"));
-    $('.beenplayed').remove();
-    $("#middleHand").append('<div id="yourplay">');
-    $("#p1Right").append($("#p1Hand img:last-child"));
-    $('#opponent-play').children().replaceWith('<div></div>');
+    $(`#${roomName} .p2Right`).append($(`#${roomName} .beenplayed img`));
+    $(`#${roomName} .beenplayed`).remove();
+    $(`#${roomName} .middleHand`).append('<div id="yourplay">');
+    $(`#${roomName} .p1Right`).append($(`#${roomName} #p1Hand img:last-child`));
+    $(`#${roomName} .opponent-play`).children().replaceWith('<div></div>');
   })
 
   socket.on("opponentReady", (data) => {
     console.log(data, "readied")
     if (name !== data) {
-      $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
+      $(`#${roomName} .opponent-play`).children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
     }
   })
 
   socket.on("goofComplete", (data) => {
     if (data === null) {
-      $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DRAW</p>`);
+      $(` #${roomName} .middleHand`).children().replaceWith(`<p style='color: yellow; font-size: 30px'>DRAW</p>`);
     } else {
       if (data === name) {
-        $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>WINNER</p>`);
+        $(` #${roomName} .middleHand`).children().replaceWith(`<p style='color: yellow; font-size: 30px'>WINNER</p>`);
       } else {
-        $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
+        $(` #${roomName} .middleHand`).children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
     setTimeout(() => {
@@ -145,18 +156,16 @@ $(function () {
     }, 3000)
   });
 
-  boardListener();
-
   const newBoard = (roomName) =>
-    `<h3 class='roomName'>${roomName}</h3>
-    <div id="display">
+    `<h3 class='roomName' id="${roomName}">${roomName}</h3>
+    <div class="display">
       <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
-      <div id="p1Left" class="gamespace">Opponent's Points
+      <div class="p1Left gamespace">Opponent's Points
         <p class="points">0</p>
       </div>
 
       <!-- p1Hand will be populated by jquery inserts -->
-      <div id="p1Hand" class="gamespace">
+      <div class="p1Hand gamespace">
         <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
         <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
         <img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">
@@ -173,139 +182,136 @@ $(function () {
       </div>
       <div class="gamespace">
         P1 Played Cards
-        <div id="p1Right">
+        <div class="p1Right">
 
         </div>
       </div>
 
-      <div id="middleLeft" class="gamespace">
+      <div class="middleLeft gamespace">
         <button type="button" class="btn btn-danger">Forfeit</button>
       </div>
       <!-- middleHand will be populated by jquery inserts -->
-      <div id="middleHand" class="gamespace">
-      <div id="opponent-play"><div></div></div>
-      <div id="dealer-play"><div></div></div>
-        <div id="yourplay"></div>
+      <div class="middleHand gamespace">
+      <div class="opponent-play"><div></div></div>
+      <div class="dealer-play"><div></div></div>
+        <div class="yourplay"></div>
       </div>
-      <div id="middleRight" class="gamespace">
-        <button type="button" class="btn btn-primary" id="ready">Ready</button>
+      <div class="middleRight gamespace">
+        <button type="button" class="btn btn-primary" class="ready">Ready</button>
       </div>
 
-      <div id="p2Left" class="gamespace">Your Points
+      <div class="p2Left" class="gamespace">Your Points
         <p class="points">0</p>
       </div>
       <!-- p2Hand will be populated by jquery inserts -->
-      <div id="p2Hand" class="gamespace">
-        <a id="ace" class="inplay" href="#">
+      <div class="p2Hand gamespace">
+        <a class="ace inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/14S.png?raw=true">
         </a>
-        <a id="card2" class="inplay" href="#">
+        <a class="card2 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/2S.png?raw=true">
         </a>
-        <a id="card3" class="inplay" href="#">
+        <a class="card3 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/3S.png?raw=true">
         </a>
-        <a id="card4" class="inplay" href="#">
+        <a class="card4 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/4S.png?raw=true">
         </a>
-        <a id="card5" class="inplay" href="#">
+        <a class="card5 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/5S.png?raw=true">
         </a>
-        <a id="card6" class="inplay" href="#">
+        <a class="card6 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/6S.png?raw=true">
         </a>
-        <a id="card7" class="inplay" href="#">
+        <a class="card7 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/7S.png?raw=true">
         </a>
-        <a id="card8" class="inplay" href="#">
+        <a class="card8 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/8S.png?raw=true">
         </a>
-        <a id="card9" class="inplay" href="#">
+        <a class="card9 inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/9S.png?raw=true">
         </a>
-        <a href="#" class="inplay" id="card10">
+        <a class="inplay card10" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/10S.png?raw=true">
         </a>
-        <a id="jack" class="inplay" href="#">
+        <a class="jack inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/11S.png?raw=true">
         </a>
-        <a id="queen" class="inplay" href="#">
+        <a class="queen inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/12S.png?raw=true">
         </a>
-        <a id="king" class="inplay" href="#">
+        <a class="king inplay" href="#">
           <img src="https://github.com/begeh/multi-user-card-games/blob/master/graphics/13S.png?raw=true">
         </a>
       </div>
       <div class="gamespace">
         P2 Played Cards
-        <div id="p2Right">
+        <div class="p2Right">
 
         </div>
       </div>
     </div>
 `;
 
-  const newFrame = () =>
-    `<div id="display">
+  const newFrame = (roomName) =>
+    `<div class='emptyBoard' id="${roomName}">
+    <div class="display">
   <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
-  <div id="p1Left" class="gamespace">P1 Points
+  <div class="p1Left gamespace">P1 Points
     <p class="points">0</p>
   </div>
 
   <!-- p1Hand will be populated by jquery inserts -->
-  <div id="p1Hand" class="gamespace">
+  <div class="p1Hand gamespace">
     </div>
   <div class="gamespace">
     P1 Played Cards
-    <div id="p1Right">
+    <div class="p1Right">
 
     </div>
   </div>
 
-  <div id="middleLeft" class="gamespace">
+  <div class="middleLeft gamespace">
     <button type="button" class="btn btn-danger">Forfeit</button>
   </div>
   <!-- middleHand will be populated by jquery inserts -->
-  <div id="middleHand" class="gamespace">
-  <div id="opponent-play"><div></div></div>
-  <div id="dealer-play"><div></div></div>
-    <div id="yourplay"></div>
+  <div class="middleHand gamespace">
+  <div class="opponent-play"><div></div></div>
+  <div class="dealer-play"><div></div></div>
+    <div class="yourplay"></div>
   </div>
-  <div id="middleRight" class="gamespace">
-    <button type="button" class="btn btn-primary" id="ready">Ready</button>
+  <div class="middleRight gamespace">
+    <button type="button" class="btn btn-primary" class="ready">Ready</button>
   </div>
 
-  <div id="p2Left" class="gamespace">P2 Points
+  <div class="p2Left gamespace">P2 Points
     <p class="points">0</p>
   </div>
   <!-- p2Hand will be populated by jquery inserts -->
-  <div id="p2Hand" class="gamespace">
+  <div class="p2Hand gamespace">
 
   </div>
   <div class="gamespace">
     P2 Played Cards
-    <div id="p2Right">
+    <div class="p2Right">
 
     </div>
   </div>
+</div>
 </div>
 `;
 
 
 
-  //when forfeit button is clicked, board reinitializes and inactivates
-  $("#forfeit").click((event) => {
-    event.preventDefault();
-    $("#display").replaceWith(newBoard());
-    $("#rightSide #display").css('opacity', '0.3');
-  });
+
 
   //Console.logs on this page appear in the repsective clients console (chrome)
   //Some of those Will most need to be changed to alerts, popups, whatever
 
   //Watches for the goofspiel new game item is clicked, then emits a
   //a goof-join event that is caught in server.js
-  $("#goof").on('click', () => {
+  $(`#goof`).on('click', () => {
     //Prompts the user to confirm room join
     if (confirm("Join Goofspiel room?")) {
       socket.emit('goof-join', { name })
@@ -360,13 +366,13 @@ $(function () {
     //Only loads the board AND cards if there are two players in the room
     if (currentRoom.length > 1) {
       console.log("board should load")
-      socket.emit('playerJoinsRoom', roomName)
-      $("#rightSide").empty();
-      $("#rightSide").append(newBoard(roomName));
-      boardListener();
+      socket.emit('playerJoinsRoom', {roomName, name})
+      $(`#${roomName}.emptyBoard`).remove();
+      $(`.rightSide`).append(newBoard(roomName));
+      boardListener(roomName);
       //Loads the frame of the play area
     } else {
-      $("#rightSide").append(newFrame());
+      $(`.rightSide`).append(newFrame(roomName));
 
     }
 
@@ -375,7 +381,7 @@ $(function () {
   socket.on("deal", (data => {
     const dealt = playingCards[data];
     console.log(socket.id)
-    $('#dealer-play').children().replaceWith(`<img src="${dealt}">`);
+    $(`#${roomName} .dealer-play`).children().replaceWith(`<img src="${dealt}">`);
   })
   );
 
