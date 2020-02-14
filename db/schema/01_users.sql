@@ -18,9 +18,9 @@ CREATE TABLE users(
 
 
 -- GAMES_DB TABLE tracks games for leaderboard purposes
--- player1 and player2 rederence user IDs
--- outcome also references a user ID to count win/loss ratios.
--- wins are games where the id is present in both fields, losses are games where they do not match
+-- id is the game's id
+-- player1 and player2 refences players' names
+-- winner references name of winner
 CREATE TABLE games_db(
   id SERIAL PRIMARY KEY NOT NULL,
   player1 VARCHAR (255) NOT NULL,
