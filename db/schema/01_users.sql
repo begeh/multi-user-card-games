@@ -27,27 +27,3 @@ CREATE TABLE games_db(
   player2 VARCHAR (255) NOT NULL,
   winner VARCHAR (255) NOT NULL
 );
-
--- HOW THIS WORKS:
--- first five values are recorded at beginning of turn using calculations from previous turn
--- last 3 values are recorded at end of turn
-
--- CREATE TABLE turn_history (
---   id SERIAL PRIMARY KEY NOT NULL,
---   game_id INTEGER REFERENCES games_db(id) ON DELETE CASCADE,
---   turn_no INTEGER NOT NULL,
---   p1_score INTEGER DEFAULT 0 NOT NULL,
---   p2_score INTEGER DEFAULT 0 NOT NULL,
---   p1_hand INTEGER [],
---   p2_hand INTEGER [],
---   dealer_hand INTEGER [],
---   p1_play INTEGER,
---   p2_play INTEGER,
---   dealer_play INTEGER,
---   forfeit INTEGER REFERENCES users(id) ON DELETE CASCADE
--- );
-
--- CREATE TABLE cards (
---   id SERIAL PRIMARY KEY NOT NULL,
---   img_address TEXT NOT NULL
--- );
