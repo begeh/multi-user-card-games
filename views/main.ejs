@@ -18,8 +18,6 @@
   <script type="text/javascript" src="/scripts/app.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 
-
-
   <!-- added in boostrap js below-->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -79,23 +77,53 @@
       <div class="dropdown dropright">
         <button class="btn btn-secondary dropdown-toggle btn-lg btn-block" type="button" id="dropdownMenuButton"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          History
+          Leaderboard
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <table class="table">
+            <thead>
+              <tr style = "text-align:center;">
+                <th scope="col"><u>Username</u></th>
+                <th scope="col"><u>No. of Wins</u></th>
+              </tr>
+            </thead>
+            <tbody>
+                <%  leaderboard.forEach((item)=>{  %>
+                  <tr>
+                  <td><%= item.user %></td>
+                  <td><%= item.number_of_wins %></td>
+                  </tr>
+               <% }); %>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="dropdown dropright">
         <button class="btn btn-secondary dropdown-toggle btn-lg btn-block" type="button" id="dropdownMenuButton"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Leaderboards
+          Game History
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <table class="table">
+            <thead>
+              <tr style = "text-align:center;">
+                <th scope="col"><u>Gametype</u></th>
+                <th scope="col"><u>Player 1</u></th>
+                <th scope="col"><u>Player 2</u></th>
+                <th scope="col"><u>Winner</u></th>
+              </tr>
+            </thead>
+            <tbody>
+                <%  history.forEach((item)=>{  %>
+                  <tr>
+                  <td>Goofspiel</td>
+                  <td><%= item.player1 %></td>
+                  <td><%= item.player2 %></td>
+                  <td><%= item.winner %></td>
+                  </tr>
+               <% }); %>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="dropdown dropright">
@@ -118,6 +146,7 @@
 
     </section>
   </div>
+
 </body>
 
 </html>

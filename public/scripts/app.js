@@ -5,12 +5,6 @@ $(function () {
   //This is the users name, we can pass this data through socket.io
   const name = $('#user-name u strong').text();
   const socket = io.connect('http://localhost:8080');
-  let score1 = 0;
-  let score2 = 0;
-  let played1 = 0;
-  let played2 = 0;
-  let dealer_play = 0;
-
 
   const escape = function (str) {
     let div = document.createElement('div');
@@ -72,14 +66,7 @@ $(function () {
     13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
   };
 
-  // const dealerCard = () => {
-  //   let index = Math.floor(Math.random() * dealerPlayed.length);
-  //   let deal = dealerPlayed.splice(index, 1);
-  //   return deal;
-  // };
-
   const boardListener = function () {
-    //let deal = dealerCard();
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
