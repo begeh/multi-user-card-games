@@ -64,10 +64,11 @@ app.use("/main", mainRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 
-// Home page
+// Login Page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
+  // Redirects the user to the main page if they have relevant cookie data
   if (req.session.user_id) {
     const templateVars = {};
     templateVars.username = req.body.username;
@@ -82,15 +83,20 @@ server.listen(PORT, () => {
 });
 
 
+//Server-side Goofspiel Code
+//Only supports one game at a time, branch multigame is
+//looking into this
 
-
-let dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+//The deck used to play goofspiel
+let dealerDeck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+//Functionaly, draws a card from the dealer deck and returns it
 const dealerCard = () => {
-  let index = Math.floor(Math.random() * dealerPlayed.length);
-  let deal = dealerPlayed.splice(index, 1)[0];
+  let index = Math.floor(Math.random() * dealerDeck.length);
+  let deal = dealerDeck.splice(index, 1)[0];
   return deal;
 };
 
+//Evaluates which player played a higher card and returns their name
 const turnEval = (p1, p2) => {
   if (p1.val > p2.val) {
     return p1.name;
@@ -100,133 +106,111 @@ const turnEval = (p1, p2) => {
   return 'draw';
 }
 
-
+//Stores a users name as a key and their played card as the value. Storing happens
+//when the user hits ready.
 let count = {};
+
+//Score contains a winners name as a key and and the value of the card they've won
 const score = {};
 
+//Takes a room as a key, and the value is an object containing 2 a key value pairs:
+//a users name and socket id. This lets us know serverside which users are in which rooms
 const roomInfo = {};
+
 //Socket.io stuff goes here
-//Any console.logs here will log on the server side (on your computers terminal)
+//How it works: socket.emits take a string and optionally another piece of data, and send them to
+//to any socket.ons that are listening for that event and optionally the data.
+//This allows you to transfer data between client and server, server and client,
+//AND server to ALL clients.
+
+//Will fire when anyone joins the main page
+//Connect them to the socket.io default Namespace
 io.on('connection', function (socket) {
 
-
-
-
   console.log("a user connected at", socket.id);
-  socket.emit('news', { hello: 'world' });
 
+  //Will fire when any user disconnects
   socket.on('disconnect', () => {
     console.log('a user disconnected')
   })
-  //Room Stuff//
+  //Room Stuff --- Rooms allow the server to emit to certain groups of clients
 
-  //Joins the socket to the room goofRoom when called
+  //Joins the client/socket to the a room when called
   const joinGoofRoom = function (nameAndRoom) {
-    //If room does not exist, it will be created before joining the socket
     socket.join(`${nameAndRoom.room}`)
-    console.log(`${nameAndRoom.name} with id ${socket.id} joined goofRoom`)
-    //Sends a message to the socket owner upon joining a room
-    io.to(`${socket.id}`).emit("userJoin", `Welcome to ${nameAndRoom.room}!`)
-    //Emits an object containing the sockets in goofRoom
+
+    //Sends a message to the client/socket owner upon joining a room
+    io.to(`${socket.id}`).emit("userJoin", nameAndRoom.room)
+    //Gets the current room information from socket.io (keys are room names, values are connectted sockets)
     const currentRoom = io.sockets.adapter.rooms[`${nameAndRoom.room}`]
+    //Emits an object containing who is in the current room and the current rooms name
     io.in(`${nameAndRoom.room}`).emit("loadGoofBoard", { currentRoom, roomName: nameAndRoom.room })
   }
 
-  //Listens for the goof-join event sent from app.js
+  //Listens for the goof-join event sent from the client
   socket.on('goof-join', function (nameAndRoom) {
-    console.log(socket.id)
-    //If room does not exist:
-
-
-
-
+    //If room value exists in passed data, the user is making a room:
     if (nameAndRoom.room) {
-
       joinGoofRoom(nameAndRoom)
+      //Adds a key to roomInfo. The ket is the created rooms name. The values are arrays of user names
+      //and socket.ids
       roomInfo[`${nameAndRoom.room}`] = {
         players: [nameAndRoom.name],
         id: [socket.id]
       }
 
-
+      //If there is no passed room value, the user is joining a random room
     } else {
-
+      //Get an array of all the room names
       const allRooms = Object.keys(roomInfo);
 
-
+      //Selects a room at random
       const roomNo = allRooms[Math.round(Math.random() * (allRooms.length - 1))];
       nameAndRoom.room = roomNo;
 
-      if (allRooms.length === 0 ) {
+      //Covers if no rooms exist
+      if (allRooms.length === 0) {
         socket.emit("noExistingGoofRooms")
+        //Covers if the selected room is "full" (has 2 people in it)
       } else if (roomInfo[nameAndRoom.room].players.length >= 2) {
         socket.emit("roomFull");
       } else {
+        //NOTE: If room does not exist, it will be created, then join the socket to it
         joinGoofRoom(nameAndRoom)
+        //Append the user name and socket.id to the roomInfo object that corresponds to
+        //the current room
         roomInfo[nameAndRoom.room].players.push(nameAndRoom.name);
         roomInfo[nameAndRoom.room].id.push(socket.id);
-        console.log(allRooms)
       }
     }
-
-
-    // if (!io.sockets.adapter.rooms[nameAndRoom.room]) {
-
-    //   joinGoofRoom(nameAndRoom)
-    //   };
-    //   console.log(roomInfo)
-
-    // } else {
-
-    //If user is already in the room
-    // if (true === io.sockets.adapter.rooms[nameAndRoom.room].sockets[`${socket.id}`]) {
-    //   console.log("User tried to join room they are already in")
-    //   io.to(`${socket.id}`).emit("alreadyJoined", io.sockets.adapter.rooms)
-    // }
-    //  if (io.sockets.adapter.rooms.goofRoom.length >= 3) {
-    //   console.log(socket.id, " tried to join a full room")
-    //   socket.emit('roomFull')
-    // } else {
-    //   joinGoofRoom(nameAndRoom)
-    //   roomInfo['goof'].players.push(nameAndRoom.name);
-    //   roomInfo['goof'].id.push(socket.id);
-    //   console.log(roomInfo)
-
-    // }
-
-
   })
 
 
-  let gameState;
-
   socket.on("playerJoinsRoom", (roomName) => {
-    console.log(roomName)
+    //Adds players to their room in roomInfo
     roomInfo[`${roomName}`].playerReady ? roomInfo[`${roomName}`].playerReady++ : roomInfo[`${roomName}`].playerReady = 1;
+    //Checks if 2 people are in a room
     if (roomInfo[`${roomName}`].playerReady === 2) {
       deal = dealerCard()
+      //Sends the dealt card to everyone in a room
       io.in(`${roomName}`).emit("dealerCard", deal)
     }
   })
 
 
   socket.on("readyClicked", (data) => {
-    console.log(data)
+    //Stores which user has readied and their bet card
     count[data.name] = data.val;
+    //Stores the room the user is in
     let roomName = data.thisRoom;
-    console.log(roomName)
-    console.log(count)
 
     if (Object.keys(count).length === 1) {
-      console.log("opponenetReady emitted")
       io.in(`${roomName}`).emit("opponentReady", data.name);
     }
 
-
+    //When both players have readied, run evaluation logic
     if (Object.keys(count).length === 2) {
-      console.log("Two people readied up")
-
-      //Winner logic
+      //Determine winner of the round
       let p1 = {
         name: Object.keys(count)[0],
         val: count[Object.keys(count)[0]]
@@ -235,19 +219,21 @@ io.on('connection', function (socket) {
         name: Object.keys(count)[1],
         val: count[Object.keys(count)[1]]
       }
-      console.log(p1, p2)
       let winnerName = turnEval(p1, p2);
+
+      //Assign the winners name and the value of the card they won
       let winner = { name: winnerName, val: deal };
       if (!score[winnerName]) {
         score[winnerName] = 0;
       }
       score[winnerName] += winner.val
-      console.log(score)
+
+      //Empties count object so it can store which player is ready next turn
       count = {};
       io.in(`${roomName}`).emit("results", winner)
 
       //On game end
-      if (dealerPlayed.length === 0) {
+      if (dealerDeck.length === 0) {
         if (Object.keys(score).length === 1 && score.draw) {
           io.in(`${roomName}`).emit("goofComplete", null)
         }
@@ -256,6 +242,7 @@ io.on('connection', function (socket) {
           io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[0])
           //If both players won a round
         } else {
+          //Stores the values of the winners and losers in the database
           if (score[Object.keys(score)[0]] > score[Object.keys(score)[1]]) {
             db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[0]}');`)
             io.in(`${roomName}`).emit("goofComplete", Object.keys(score)[0])
@@ -267,9 +254,10 @@ io.on('connection', function (socket) {
             io.in(`${roomName}`).emit("goofComplete", null);
           }
         }
-        //Resets the dealer deck
-        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+        //Resets the dealer deck for a new game
+        dealerDeck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
+        //Play another turn
       } else {
         deal = dealerCard()
         io.in(`${roomName}`).emit("dealerCard", deal)
@@ -277,24 +265,6 @@ io.on('connection', function (socket) {
     }
 
   })
-
-
-  socket.on('goofReady', function (data) {
-    //Checks if the goofRoom exists
-    if (io.sockets.adapter.rooms.goofRoom) {
-      //Sets roomMembers to an object containing the socket.id's of everyone
-      //in goofRoom
-      const roomMembers = io.sockets.adapter.rooms.goofRoom.sockets
-      if (roomMembers[socket.id] === true) {
-        console.log("Users in room:\n", roomMembers)
-        console.log(data + ' with id ' + socket.id + ' sent ready while in goofRoom');
-      } else {
-        console.log(`User ${socket.id} tried to ready while not in room`)
-      }
-    } else {
-      console.log("Room does not exist")
-    }
-  });
 
 
 });

@@ -67,8 +67,13 @@ $(function () {
     13: 'https://github.com/begeh/multi-user-card-games/blob/master/graphics/13H.png?raw=true'
   };
 
+
+  //contains jquery event listeners that handle moving cards around the board during play
+  //Listeners will add and remove html ids move cards around
   const boardListener = function () {
+    //Grabs the room name from the top of the inserted html when loading the board
     let thisRoom = $(`.roomName`).text()
+    //Listens for the card dealt from the serverside dealer deck
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
@@ -92,25 +97,19 @@ $(function () {
 
     //when ready button is clicked, players inplay hand goes to played cards sections and opponents card goes to their discard pile
     $("#ready").click((element) => {
-      console.log("MOUTNING!!")
-
       element.preventDefault();
       if ($("#yourplay").html() != "") {
-
-        console.log("Someone sent data:", name, playerCardVal())
+        //Sends a players name, the value of their played card and name of their room
         socket.emit('readyClicked', { name, val: playerCardVal(), thisRoom });
       }
     });
   }
-
+  //Updates the scoreboard for each client, depending on whether they won or not.
   socket.on('results', (data) => {
-    console.log(data)
     if (data.name === name) {
-      console.log(Number($("#p2Left p").text()) + data.val)
       $("#p2Left p").text(Number($("#p2Left p").text()) + data.val);
     } else if (data.name === 'draw') {
     } else {
-      console.log(Number($("#p1Left p").text()) + data.val)
       $("#p1Left p").text(Number($("#p1Left p").text()) + data.val);
     }
     //Moves cards from each play area to their respective plyed cards area
@@ -120,14 +119,14 @@ $(function () {
     $("#p1Right").append($("#p1Hand img:last-child"));
     $('#opponent-play').children().replaceWith('<div></div>');
   })
-
+  //If client A readies, a card will be placed facedown on client Bs screen (and vice versa)
   socket.on("opponentReady", (data) => {
-    console.log(data, "readied")
     if (name !== data) {
       $('#opponent-play').children().replaceWith('<img src="https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png">');
     }
   })
 
+  //When a game is over, displays text depending on whether a client won or lost or drew
   socket.on("goofComplete", (data) => {
     if (data === null) {
       $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DRAW</p>`);
@@ -138,15 +137,15 @@ $(function () {
         $('#middleHand').children().replaceWith(`<p style='color: yellow; font-size: 30px'>DEFEAT</p>`)
       }
     }
+    //Reloads the page to kick the players out of their current room
     setTimeout(() => {
-
       location.reload()
-
     }, 3000)
   });
-
+  //Required for play
   boardListener();
 
+  //Contains the HTML to insert to allow play
   const newBoard = (roomName) =>
     `<h3 class='roomName'>${roomName}</h3>
     <div id="display">
@@ -245,6 +244,7 @@ $(function () {
     </div>
 `;
 
+//Contains the html to display a frame of a gameboard
   const newFrame = () =>
     `<div id="display">
   <!-- <img src="https://static.vecteezy.com/system/resources/previews/000/126/496/large_2x/playing-card-back-pattern-vector.jpg" alt="Image proved by vecteezy.com"> -->
@@ -292,33 +292,19 @@ $(function () {
 `;
 
 
-
-  //when forfeit button is clicked, board reinitializes and inactivates
-  // $("#forfeit").click((event) => {
-  //   event.preventDefault();
-  //   $("#display").replaceWith(newBoard());
-  //   $("#rightSide #display").css('opacity', '0.3');
-  // });
-
-  //Console.logs on this page appear in the repsective clients console (chrome)
-  //Some of those Will most need to be changed to alerts, popups, whatever
-
-  //Watches for the goofspiel new game item is clicked, then emits a
+  //Watches for the make goof room id being clicked clicked, then emits a
   //a goof-join event that is caught in server.js
   $("#goof").on('click', () => {
     //Prompts the user to confirm room join
     if (confirm("Join Goofspiel room?")) {
       socket.emit('goof-join', { name })
-      console.log("Attemping goofRoom join")
     }
   });
-
+  //Same as a bove but on the make room button
   $("#goofMake").on('click', () => {
-
     const goofRoom = prompt("What would you like to call you room?")
     if (goofRoom) {
       socket.emit('goof-join', { name, room: goofRoom })
-      console.log("Attemping goofRoom creation")
     }
   }
   );
@@ -327,10 +313,8 @@ $(function () {
     alert("No Goofspiel rooms have been made!")
   })
 
-
-  //Aelrts the client if they are already in the room they are trying to join
+  //Does nothing right now
   socket.on("alreadyJoined", (data) => {
-    console.log(data)
     alert("You are already in this room")
   })
 
@@ -338,43 +322,28 @@ $(function () {
     alert("The room is full.")
   })
 
-  //Logs to the clients browsers console. Can be communicated
-  //to the user in a better way, decide during group merge discussion
+  //Alerts the client when they've joined a room.
   socket.on('userJoin', function (data) {
-    alert(data)
+    alert(`Welcome to ${data}!`)
   })
 
-  //Logs to the clients browsers console. Can be communicated
-  //to the user in a better way, decide during group merge discussion
-  // socket.on('ready', (data) => {
-  //   alert(data + " joined the room")
-  // })
-
-  //Recievs an object containing the socket.id of all users in
-  //goofRoom
+  //Recievs an object containing a rooms name and all users in the room
   socket.on("loadGoofBoard", (data) => {
     const { currentRoom, roomName } = data;
-    console.table(data)
-    console.log(currentRoom.length)
-    console.log(currentRoom.sockets)
     //Only loads the board AND cards if there are two players in the room
     if (currentRoom.length > 1) {
-      console.log("board should load")
       socket.emit('playerJoinsRoom', roomName)
       $("#rightSide").empty();
       $("#rightSide").append(newBoard(roomName));
       boardListener();
-      //Loads the frame of the play area
+      //Loads the frame of the play area if only one person is present in a room
     } else {
       $("#rightSide").append(newFrame());
-
     }
-
   })
-
+  //Displays which card has been dealt to each player
   socket.on("deal", (data => {
     const dealt = playingCards[data];
-    console.log(socket.id)
     $('#dealer-play').children().replaceWith(`<img src="${dealt}">`);
   })
   );
