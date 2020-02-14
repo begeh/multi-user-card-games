@@ -224,16 +224,18 @@ io.on('connection', function (socket) {
           //If both players won a round
         } else {
           if (score[Object.keys(score)[0]] > score[Object.keys(score)[1]]) {
-            io.in("goofRoom").emit("goofComplete", Object.keys(score)[0])
+            db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[0]}');`)
+              io.in("goofRoom").emit("goofComplete", Object.keys(score)[0]);
           } else if (score[Object.keys(score)[0]] < score[Object.keys(score)[1]]) {
-            io.in("goofRoom").emit("goofComplete", Object.keys(score)[1])
+            db.query(`INSERT INTO games_db (player1, player2, winner) VALUES ('${Object.keys(score)[0]}','${Object.keys(score)[1]}', '${Object.keys(score)[1]}');`);
+            io.in("goofRoom").emit("goofComplete", Object.keys(score)[1]);
           } else {
             io.in("goofRoom").emit("goofComplete", null)
-
           }
         }
         //Resets the dealer deck
-        dealerPlayed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        dealerPlayed = [1, 2, 3];
+        // , 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
       } else {
         deal = dealerCard()
