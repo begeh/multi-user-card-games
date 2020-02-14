@@ -68,10 +68,7 @@ $(function () {
   };
 
   const boardListener = function () {
-<<<<<<< HEAD
-=======
     let thisRoom = $(`.roomName`).text()
->>>>>>> ee7f9ff6acb3a112135a1f5bc8f9935b7e8e4c0a
     socket.on("dealerCard", (deal) => {
       ($('#dealer-play').children()).replaceWith(`<img id =${deal} src = ${playingCards[deal]}>`);
       //when player clicks on a card, it is moved to the middle of game board for play
