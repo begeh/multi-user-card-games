@@ -179,7 +179,7 @@ $(function () {
       </div>
 
       <div id="middleLeft" class="gamespace">
-        <button type="button" class="btn btn-danger">Forfeit</button>
+        <button id= "forfeit" type="button" class="btn btn-danger">Forfeit</button>
       </div>
       <!-- middleHand will be populated by jquery inserts -->
       <div id="middleHand" class="gamespace">

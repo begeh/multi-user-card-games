@@ -84,6 +84,7 @@
             <thead>
               <tr style = "text-align:center;">
                 <th scope="col"><u>Username</u></th>
+                <th scope="col"><u>Gametype</u></th>
                 <th scope="col"><u>No. of Wins</u></th>
               </tr>
             </thead>
@@ -91,6 +92,7 @@
                 <%  leaderboard.forEach((item)=>{  %>
                   <tr>
                   <td><%= item.user %></td>
+                  <td>Goofspiel</td>
                   <td><%= item.number_of_wins %></td>
                   </tr>
                <% }); %>

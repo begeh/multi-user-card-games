@@ -22,19 +22,18 @@ module.exports = (db) => {
         GROUP BY users.username
           ORDER BY number_of_wins DESC;
           `)
-          .then((res)=>{
-            templateVars.leaderboard = res.rows;
-          })
-          .then(()=>{
-            db.query(`SELECT player1, player2, winner
+            .then((res) => {
+              templateVars.leaderboard = res.rows;
+            })
+            .then(() => {
+              db.query(`SELECT player1, player2, winner
             FROM games_db
             WHERE '${req.body.username}' = games_db.player1 OR '${req.body.username}' = games_db.player2;`)
-            .then((result)=>{
-              templateVars.history = result.rows;
-              console.log(templateVars);
-              res.render('main', templateVars);
-            })
-          });
+                .then((result) => {
+                  templateVars.history = result.rows;
+                  res.render('main', templateVars);
+                })
+            });
         } else {
           res.send("Wrong Password");
         }
