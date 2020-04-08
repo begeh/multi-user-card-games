@@ -20,7 +20,7 @@ Features included:
 !["Screenshot of Login"](https://github.com/begeh/multi-user-card-games/blob/master/docs/login.png)
 !["Screenshot of GoofSpiel First Player Play"](https://github.com/begeh/multi-user-card-games/blob/master/docs/gameboard1.png)
 !["Screenshot of GoofSpiel Second Player Play"](https://github.com/begeh/multi-user-card-games/blob/master/docs/gameboard2.png)
-!["Screenshot of GoofSpiel Game In Progress"](https://github.com/begeh/multi-user-card-games/blob/master/docs/gameboard2.png)
+!["Screenshot of GoofSpiel Game In Progress"](https://github.com/begeh/multi-user-card-games/blob/master/docs/gameboard3.png)
 
 ## Getting Started
 
