@@ -3,7 +3,7 @@ GAMEBOARD
 
 ## Description
 
-Gameboard is a multi-user game interface where two or more players can play card games in real-time. Game moves are shared between users utilizing Sockets.io.
+Gameboard is a multi-user game interface where two or more players can play card games in real-time. Game moves are shared between users utilizing Socket.io.
 
 Games currently on dock:
 
@@ -12,7 +12,7 @@ Games currently on dock:
 Features included:
 1. Create a game room to play in
 2. Join a game room that has been created using the room name or by selecting to join a random game room in progress
-3. Game history of the logged in
+3. Game history of the logged in player
 4. Leaderboards, updated in real time
 
 ## Final Product
@@ -43,7 +43,7 @@ Features included:
 - PG 6.x
 - Express
 - PostgreSQL
-- Sockets.io
+- Socket.io
 - Cookie Session
 - SASS
 
